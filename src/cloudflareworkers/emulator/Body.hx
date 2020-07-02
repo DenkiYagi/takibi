@@ -28,7 +28,7 @@ class Body {
     function new(?body:BodySource) {
         this.body = body;
     }
-
+ 
     /**
         Returns a promise that resolves with an ArrayBuffer representation of the request body.
     **/
