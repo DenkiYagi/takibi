@@ -1,0 +1,30 @@
+{
+  "name": "cloudflare-workers-emulator",
+  "version": "1.0.0",
+  "description": "Local emulator for Cloudflare Workers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "haxe build.hxml",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DenkiYagi/cloudflare-workers-emulator.git"
+  },
+  "keywords": [
+    "CloudflareWorkers",
+    "Emulator"
+  ],
+  "author": "DenkiYagi",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/DenkiYagi/cloudflare-workers-emulator/issues"
+  },
+  "homepage": "https://github.com/DenkiYagi/cloudflare-workers-emulator#readme",
+  "dependencies": {
+    "abab": "^2.0.3",
+    "node-fetch": "^2.6.0",
+    "web-streams-polyfill": "^2.1.1"
+  }
+}
