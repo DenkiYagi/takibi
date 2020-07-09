@@ -1,11 +1,12 @@
 -cp src
+-cp test
 -cp extern/micro/src
 -cp extern/node-fetch/src
 -cp extern/form-data/src
 -cp extern/web-streams-polyfill/src
 -lib hxnodejs:git:git@github.com:HaxeFoundation/hxnodejs.git
 -lib buddy
--main test.TestMain
+-main cloudflareworkers.emulator.TestMain
 -js ./test/index.js
 -D buddy-colors
 --cmd node test/index

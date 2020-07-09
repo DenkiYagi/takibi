@@ -1,4 +1,4 @@
-package test;
+package cloudflareworkers.emulator;
 
 import buddy.BuddySuite;
 using buddy.Should;
