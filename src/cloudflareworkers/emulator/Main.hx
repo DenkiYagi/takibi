@@ -15,13 +15,12 @@ class Main {
             return;
         }
 
-        var runtime = makeRuntime(path);
-        var server = makeServer(runtime);
+        var server = launchServer(path);
 
         Fs.watch(path, (eventType, filename) -> {
+            if (!Fs.existsSync(path) || Fs.statSync(path).size == 0) return;
             server.close();
-            runtime = makeRuntime(path);
-            server = makeServer(runtime);
+            server = launchServer(path);
             Console.log("cloudflare-workers-emulator restarted: http://localhost:3000/");
         });
 
@@ -32,16 +31,12 @@ class Main {
         //Node.module.exports = runtime.handle;
     }
 
-    static function makeRuntime(path: String) {
+    static function launchServer(path: String) {
         final code = Fs.readFileSync(path, "utf-8");
 
         final runtime = new Runtime();
         runtime.loadScript(code);
 
-        return runtime;
-    }
-
-    static function makeServer(runtime: Runtime) {
         final server = Http.createServer(runtime.handle);
         server.on('clientError', (err, socket) -> {
             socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
