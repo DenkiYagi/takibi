@@ -1,5 +1,6 @@
 package cloudflareworkers.emulator;
 
+import js.lib.Error.TypeError;
 import haxe.DynamicAccess;
 import haxe.extern.EitherType;
 import js.lib.ArrayBuffer;
@@ -68,6 +69,7 @@ class Request extends Body {
     function toReadableStream(method:RequestMethod, body:Null<EitherType<String, ReadableStream>>):Null<ReadableStream> {
         return switch (method) {
             case GET | HEAD:
+                if (body != null) throw new TypeError("Request with a GET or HEAD method cannot have a body.");
                 null;
             case _ if (Std.is(body, ReadableStream)):
                 (body : ReadableStream);
