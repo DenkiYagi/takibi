@@ -28,7 +28,18 @@ class RequestTest extends BuddySuite {
   public function new() {
     final dummyUrl = "https://example.com/";
     describe("Request.new()", {
-      it("should return Request that has expected properties(string input)", (done) -> {
+      it("should return Request that has default properties (new Request(string))", {
+        final expect = { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" };
+        final request = new Request(dummyUrl);
+
+        request.url.should.be(expect.url);
+        request.method.should.be(expect.method);
+        request.redirect.should.be(expect.redirect);
+        request.body.should.be(expect.body);
+        request.headers.entries().next().done.should.be(true);
+      });
+
+      it("should return Request that has expected properties (new Request(string, init))", (done) -> {
         final testCases: Array<Dynamic> = [
           { init: null,                                                                                 expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
           { init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },               expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
@@ -83,7 +94,7 @@ class RequestTest extends BuddySuite {
         }))).then(cast done, fail);
       });
 
-      it("should return Request that has expected properties(Request input)", (done) -> {
+      it("should return Request that has expected properties (new Request(Request, init))", (done) -> {
         final testCases: Array<Dynamic> = [
           { input: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },              init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
           { input: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } },   init: null,  expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
