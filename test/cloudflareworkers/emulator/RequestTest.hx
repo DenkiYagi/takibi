@@ -94,6 +94,58 @@ class RequestTest extends BuddySuite {
         }))).then(cast done, fail);
       });
 
+      it("should return Request that has source requests properties (new Request(Request))", (done) -> {
+        final testCases: Array<Dynamic> = [
+          { init: null },
+          { init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },
+          { init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } } },
+          { init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } },
+          { init: { redirect: "follow" } },
+          { init: { redirect: "error" } },
+          { init: { redirect: "manual" } },
+          { init: { method: "GET" } },
+          { init: { method: "HEAD" } },
+          { init: { method: "POST" } },
+          { init: { method: "PUT" } },
+          { init: { method: "DELETE" } },
+          { init: { method: "CONNECT" } },
+          { init: { method: "OPTIONS" } },
+          { init: { method: "PATCH" } },
+          { init: { method: "POST", body: "NonNull" } },
+          { init: { method: "PUT", body: "NonNull" } },
+          { init: { method: "DELETE", body: "NonNull" } },
+          { init: { method: "CONNECT", body: "NonNull" } },
+          { init: { method: "OPTIONS", body: "NonNull" } },
+          { init: { method: "PATCH", body: "NonNull" } },
+        ];
+
+        Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
+          final source = new Request(dummyUrl, testCase.init);
+          final dest = new Request(source);
+          dest.url.should.be(source.url);
+          dest.method.should.be(source.method);
+          dest.redirect.should.be(source.redirect);
+
+          var itr = source.headers.entries();
+          var result = itr.next();
+          while (!result.done) {
+            dest.headers.get(result.value[0]).should.be(result.value[1]);
+            result = itr.next();
+          }
+
+          if (source.body == null) {
+            dest.body.should.be(null);
+            resolve(null);
+          } else {
+            (cast ((cast source.body).locked, Bool)).should.be(true);
+            RequestTest.bodyToString(cast dest.body).then(bodyText -> {
+              bodyText.should.be((cast testCase.init).body);
+              resolve(null);
+            }, reject);
+          }
+        }))).then(cast done, fail);
+      });
+
       it("should return Request that has expected properties (new Request(Request, init))", (done) -> {
         final testCases: Array<Dynamic> = [
           { input: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },              init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
@@ -190,13 +242,6 @@ class RequestTest extends BuddySuite {
             }
           }
         }))).then(cast done, fail);
-      });
-
-      it("should lock body for source Request", {
-        final source = new Request(dummyUrl, { method: POST, body: "some body" });
-        final dest = new Request(source);
-
-        (cast ((cast source.body).locked, Bool)).should.be(true);
       });
     });
 
