@@ -54,7 +54,15 @@ class Request extends Body {
             method = (_init.method != null) ? _init.method : _input.method;
             headers = new Headers((_init.headers != null) ? _init.headers : _input.headers);
             redirect = (_init.redirect != null) ? _init.redirect : _input.redirect;
-            super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : cast _input.body));
+
+            var _body:Null<EitherType<String, ReadableStream>> = cast _input.body;
+            if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
+                // clone and lock self stream
+                final teedStreams:Array<ReadableStream> = (cast _body).tee();
+                _body = teedStreams[0];
+                teedStreams[1].cancel("");
+            }
+            super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : _body));
         }
     }
 
