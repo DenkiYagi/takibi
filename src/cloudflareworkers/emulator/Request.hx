@@ -1,5 +1,7 @@
 package cloudflareworkers.emulator;
 
+import js.lib.Object;
+import js.Lib;
 import js.lib.Error.TypeError;
 import haxe.DynamicAccess;
 import haxe.extern.EitherType;
@@ -52,7 +54,7 @@ class Request extends Body {
             method = (_init.method != null) ? _init.method : _input.method;
             headers = new Headers((_init.headers != null) ? _init.headers : _input.headers);
             redirect = (_init.redirect != null) ? _init.redirect : _input.redirect;
-            super(toReadableStream(method, (_init.body != null) ? _init.body : cast _input.body));
+            super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : cast _input.body));
         }
     }
 
@@ -90,6 +92,12 @@ class Request extends Body {
         Creates a copy of the current Request object.
     **/
     public function clone():Request {
+        if (Std.is(body, ReadableStream)) {
+            final teedStreams: Array<ReadableStream> = (cast body).tee();
+            final clonedRequest = new Request(this, { body: teedStreams[0] });
+            body = teedStreams[1];
+            return clonedRequest;
+        }
         return new Request(this);
     }
 }
