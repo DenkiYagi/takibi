@@ -98,38 +98,38 @@ class RequestTest extends BuddySuite {
 
       it("should return Request that has expected properties (new Request(string, request))", (done) -> {
         final testCases: Array<Dynamic> = [
-          { request: null,                                                                                 expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
-          { request: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },               expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
-          { request: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } },    expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
-          { request: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] },  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
-          { request: { redirect: "follow" },                                                               expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
-          { request: { redirect: "error" },                                                                expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },                                                                         throwError: false },
-          { request: { redirect: "manual" },                                                               expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },                                                                        throwError: false },
-          { request: { method: "GET" },                                                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
-          { request: { method: "HEAD" },                                                                   expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },                                                                       throwError: false },
-          { request: { method: "POST" },                                                                   expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },                                                                       throwError: false },
-          { request: { method: "PUT" },                                                                    expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },                                                                        throwError: false },
-          { request: { method: "DELETE" },                                                                 expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },                                                                     throwError: false },
-          { request: { method: "CONNECT" },                                                                expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },                                                                    throwError: false },
-          { request: { method: "OPTIONS" },                                                                expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },                                                                    throwError: false },
-          { request: { method: "PATCH" },                                                                  expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },                                                                      throwError: false },
-          { request: { body: "NonNull" },                                                                  expect: {},                                                                                                                                                   throwError: true },
-          { request: { method: "GET", body: "NonNull" },                                                   expect: {},                                                                                                                                                   throwError: true },
-          { request: { method: "HEAD", body: "NonNull" },                                                  expect: {},                                                                                                                                                   throwError: true },
-          { request: { method: "POST", body: "NonNull" },                                                  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },                                                                  throwError: false },
-          { request: { method: "PUT", body: "NonNull" },                                                   expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },                                                                   throwError: false },
-          { request: { method: "DELETE", body: "NonNull" },                                                expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },                                                                throwError: false },
-          { request: { method: "CONNECT", body: "NonNull" },                                               expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },                                                               throwError: false },
-          { request: { method: "OPTIONS", body: "NonNull" },                                               expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },                                                               throwError: false },
-          { request: { method: "PATCH", body: "NonNull" },                                                 expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },                                                                 throwError: false },
+          { request: { input: dummyUrlSub, init: null},                                                                                 expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },              expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } } },   expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } }, expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "follow" } },                                                              expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "error" } },                                                               expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },                                                                         throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "manual" } },                                                              expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "GET" } },                                                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "HEAD" } },                                                                  expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },                                                                       throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST" } },                                                                  expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },                                                                       throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PUT" } },                                                                   expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "DELETE" } },                                                                expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },                                                                     throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "CONNECT" } },                                                               expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },                                                                    throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "OPTIONS" } },                                                               expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },                                                                    throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PATCH" } },                                                                 expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },                                                                      throwError: false },
+          { request: { input: dummyUrlSub, init: { body: "NonNull" } },                                                                 expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "GET", body: "NonNull" } },                                                  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "HEAD", body: "NonNull" } },                                                 expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },                                                 expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },                                                                  throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PUT", body: "NonNull" } },                                                  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },                                                                   throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "DELETE", body: "NonNull" } },                                               expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },                                                                throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "CONNECT", body: "NonNull" } },                                              expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },                                                               throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "OPTIONS", body: "NonNull" } },                                              expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },                                                               throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PATCH", body: "NonNull" } },                                                expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },                                                                 throwError: false },
         ];
 
         Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
           if (testCase.throwError) {
-            (() -> new Request(dummyUrl, new Request(dummyUrlSub, testCase.request))).should.throwAnything();
+            (() -> new Request(dummyUrl, new Request(testCase.request.input, testCase.request.init))).should.throwAnything();
             resolve(null);
           } else {
-            final req = new Request(dummyUrl, new Request(dummyUrlSub, testCase.request));
+            final req = new Request(dummyUrl, new Request(testCase.request.input, testCase.request.init));
             req.url.should.be(testCase.expect.url);
             req.method.should.be(testCase.expect.method);
             req.redirect.should.be(testCase.expect.redirect);
@@ -153,31 +153,31 @@ class RequestTest extends BuddySuite {
 
       it("should return Request that has source requests properties (new Request(request))", (done) -> {
         final testCases: Array<Dynamic> = [
-          { request: null },
-          { request: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },
-          { request: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } } },
-          { request: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } },
-          { request: { redirect: "follow" } },
-          { request: { redirect: "error" } },
-          { request: { redirect: "manual" } },
-          { request: { method: "GET" } },
-          { request: { method: "HEAD" } },
-          { request: { method: "POST" } },
-          { request: { method: "PUT" } },
-          { request: { method: "DELETE" } },
-          { request: { method: "CONNECT" } },
-          { request: { method: "OPTIONS" } },
-          { request: { method: "PATCH" } },
-          { request: { method: "POST", body: "NonNull" } },
-          { request: { method: "PUT", body: "NonNull" } },
-          { request: { method: "DELETE", body: "NonNull" } },
-          { request: { method: "CONNECT", body: "NonNull" } },
-          { request: { method: "OPTIONS", body: "NonNull" } },
-          { request: { method: "PATCH", body: "NonNull" } },
+          { request: { input: dummyUrl, init: null } },
+          { request: { input: dummyUrl, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } } },
+          { request: { input: dummyUrl, init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } } } },
+          { request: { input: dummyUrl, init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } } },
+          { request: { input: dummyUrl, init: { redirect: "follow" } } },
+          { request: { input: dummyUrl, init: { redirect: "error" } } },
+          { request: { input: dummyUrl, init: { redirect: "manual" } } },
+          { request: { input: dummyUrl, init: { method: "GET" } } },
+          { request: { input: dummyUrl, init: { method: "HEAD" } } },
+          { request: { input: dummyUrl, init: { method: "POST" } } },
+          { request: { input: dummyUrl, init: { method: "PUT" } } },
+          { request: { input: dummyUrl, init: { method: "DELETE" } } },
+          { request: { input: dummyUrl, init: { method: "CONNECT" } } },
+          { request: { input: dummyUrl, init: { method: "OPTIONS" } } },
+          { request: { input: dummyUrl, init: { method: "PATCH" } } },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } } },
+          { request: { input: dummyUrl, init: { method: "PUT", body: "NonNull" } } },
+          { request: { input: dummyUrl, init: { method: "DELETE", body: "NonNull" } } },
+          { request: { input: dummyUrl, init: { method: "CONNECT", body: "NonNull" } } },
+          { request: { input: dummyUrl, init: { method: "OPTIONS", body: "NonNull" } } },
+          { request: { input: dummyUrl, init: { method: "PATCH", body: "NonNull" } } },
         ];
 
         Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
-          final source = new Request(dummyUrl, testCase.init);
+          final source = new Request(testCase.request.input, testCase.request.init);
           final dest = new Request(source);
           dest.url.should.be(source.url);
           dest.method.should.be(source.method);
@@ -196,7 +196,7 @@ class RequestTest extends BuddySuite {
           } else {
             (cast ((cast source.body).locked, Bool)).should.be(true);
             RequestTest.bodyToString(cast dest.body).then(bodyText -> {
-              bodyText.should.be((cast testCase.init).body);
+              bodyText.should.be((cast testCase.request.init).body);
               resolve(null);
             }, reject);
           }
@@ -205,80 +205,178 @@ class RequestTest extends BuddySuite {
 
       it("should return Request that has expected properties (new Request(request, init))", (done) -> {
         final testCases: Array<Dynamic> = [
-          { request: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },              init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
-          { request: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } },   init: null,  expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
-          { request: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] }, init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
-          { request: { redirect: "follow" },                                                              init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
-          { request: { redirect: "error" },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },                                                                         throwError: false },
-          { request: { redirect: "manual" },                                                              init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },                                                                        throwError: false },
-          { request: { method: "GET" },                                                                   init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
-          { request: { method: "HEAD" },                                                                  init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },                                                                       throwError: false },
-          { request: { method: "POST" },                                                                  init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },                                                                       throwError: false },
-          { request: { method: "PUT" },                                                                   init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },                                                                        throwError: false },
-          { request: { method: "DELETE" },                                                                init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },                                                                     throwError: false },
-          { request: { method: "CONNECT" },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },                                                                    throwError: false },
-          { request: { method: "OPTIONS" },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },                                                                    throwError: false },
-          { request: { method: "PATCH" },                                                                 init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },                                                                      throwError: false },
-          { request: { body: "NonNull" },                                                                 init: null,  expect: {},                                                                                                                                                   throwError: true },
-          { request: { method: "GET", body: "NonNull" },                                                  init: null,  expect: {},                                                                                                                                                   throwError: true },
-          { request: { method: "HEAD", body: "NonNull" },                                                 init: null,  expect: {},                                                                                                                                                   throwError: true },
-          { request: { method: "POST", body: "NonNull" },                                                 init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },                                                                  throwError: false },
-          { request: { method: "PUT", body: "NonNull" },                                                  init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },                                                                   throwError: false },
-          { request: { method: "DELETE", body: "NonNull" },                                               init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },                                                                throwError: false },
-          { request: { method: "CONNECT", body: "NonNull" },                                              init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },                                                               throwError: false },
-          { request: { method: "OPTIONS", body: "NonNull" },                                              init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },                                                               throwError: false },
-          { request: { method: "PATCH", body: "NonNull" },                                                init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },                                                                 throwError: false },
-          { request: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] }, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },               expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
-          { request: { headers: { "content-type": "text/plain", "Accept-Encoding": "deflate" } },         init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } },    expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
-          { request: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },              init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] },  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
-          { request: { redirect: "follow" },  init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
-          { request: { redirect: "follow" },  init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
-          { request: { redirect: "follow" },  init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
-          { request: { redirect: "error" },   init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
-          { request: { redirect: "error" },   init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
-          { request: { redirect: "error" },   init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
-          { request: { redirect: "manual" },  init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
-          { request: { redirect: "manual" },  init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
-          { request: { redirect: "manual" },  init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
-          { request: { method: "PATCH" },     init: { method: "GET" },                                        expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
-          { request: { method: "GET" },       init: { method: "HEAD" },                                       expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },           throwError: false },
-          { request: { method: "HEAD" },      init: { method: "POST" },                                       expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },           throwError: false },
-          { request: { method: "POST" },      init: { method: "PUT" },                                        expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },            throwError: false },
-          { request: { method: "PUT" },       init: { method: "DELETE" },                                     expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },         throwError: false },
-          { request: { method: "DELETE" },    init: { method: "CONNECT" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },        throwError: false },
-          { request: { method: "CONNECT" },   init: { method: "OPTIONS" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },        throwError: false },
-          { request: { method: "OPTIONS" },   init: { method: "PATCH" },                                      expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },          throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "GET" },                        expect: {},                                                                                       throwError: true },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "HEAD" },                       expect: {},                                                                                       throwError: true },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "POST" },                       expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },      throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "PUT" },                        expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },       throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "DELETE" },                     expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },    throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "CONNECT" },                    expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },   throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "OPTIONS" },                    expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },   throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "PATCH" },                      expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },     throwError: false },
-          { request: { method: "POST", body: "NonNull1" },    init: { body: "NonNull2" },                     expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "POST", redirect: "follow" },     throwError: false },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "GET", body: "NonNull2" },      expect: {},                                                                                       throwError: true },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "HEAD", body: "NonNull2" },     expect: {},                                                                                       throwError: true },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "POST", body: "NonNull2" },     expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "POST", redirect: "follow" },     throwError: false },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "PUT", body: "NonNull2" },      expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "PUT", redirect: "follow" },      throwError: false },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "DELETE", body: "NonNull2" },   expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "DELETE", redirect: "follow" },   throwError: false },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "CONNECT", body: "NonNull2" },  expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "CONNECT", redirect: "follow" },  throwError: false },
-          { request: { method: "POST", body: "NonNull1" },    init: { method: "OPTIONS", body: "NonNull2" },  expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "OPTIONS", redirect: "follow" },  throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "GET", body: null },            expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
-          { request: { method: "POST", body: "NonNull" },     init: { method: "HEAD", body: null },           expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },           throwError: false },
+          { request: { input: dummyUrl, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },              init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
+          { request: { input: dummyUrl, init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } } },   init: null,  expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrl, init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } }, init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "follow" } },                                                              init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "error" } },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },                                                                         throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "manual" } },                                                              init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },                                                                        throwError: false },
+          { request: { input: dummyUrl, init: { method: "GET" } },                                                                   init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrl, init: { method: "HEAD" } },                                                                  init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },                                                                       throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST" } },                                                                  init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },                                                                       throwError: false },
+          { request: { input: dummyUrl, init: { method: "PUT" } },                                                                   init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrl, init: { method: "DELETE" } },                                                                init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },                                                                     throwError: false },
+          { request: { input: dummyUrl, init: { method: "CONNECT" } },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },                                                                    throwError: false },
+          { request: { input: dummyUrl, init: { method: "OPTIONS" } },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },                                                                    throwError: false },
+          { request: { input: dummyUrl, init: { method: "PATCH" } },                                                                 init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },                                                                      throwError: false },
+          { request: { input: dummyUrl, init: { body: "NonNull" } },                                                                 init: null,  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrl, init: { method: "GET", body: "NonNull" } },                                                  init: null,  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrl, init: { method: "HEAD", body: "NonNull" } },                                                 init: null,  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },                                                 init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },                                                                  throwError: false },
+          { request: { input: dummyUrl, init: { method: "PUT", body: "NonNull" } },                                                  init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },                                                                   throwError: false },
+          { request: { input: dummyUrl, init: { method: "DELETE", body: "NonNull" } },                                               init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },                                                                throwError: false },
+          { request: { input: dummyUrl, init: { method: "CONNECT", body: "NonNull" } },                                              init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },                                                               throwError: false },
+          { request: { input: dummyUrl, init: { method: "OPTIONS", body: "NonNull" } },                                              init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },                                                               throwError: false },
+          { request: { input: dummyUrl, init: { method: "PATCH", body: "NonNull" } },                                                init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },                                                                 throwError: false },
+          { request: { input: dummyUrl, init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } }, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },               expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
+          { request: { input: dummyUrl, init: { headers: { "content-type": "text/plain", "Accept-Encoding": "deflate" } } },         init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } },    expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrl, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },              init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] },  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "follow" } },  init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "follow" } },  init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "follow" } },  init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "error" } },   init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "error" } },   init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "error" } },   init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "manual" } },  init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "manual" } },  init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
+          { request: { input: dummyUrl, init: { redirect: "manual" } },  init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
+          { request: { input: dummyUrl, init: { method: "PATCH" } },     init: { method: "GET" },                                        expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrl, init: { method: "GET" } },       init: { method: "HEAD" },                                       expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },           throwError: false },
+          { request: { input: dummyUrl, init: { method: "HEAD" } },      init: { method: "POST" },                                       expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },           throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST" } },      init: { method: "PUT" },                                        expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrl, init: { method: "PUT" } },       init: { method: "DELETE" },                                     expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },         throwError: false },
+          { request: { input: dummyUrl, init: { method: "DELETE" } },    init: { method: "CONNECT" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },        throwError: false },
+          { request: { input: dummyUrl, init: { method: "CONNECT" } },   init: { method: "OPTIONS" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },        throwError: false },
+          { request: { input: dummyUrl, init: { method: "OPTIONS" } },   init: { method: "PATCH" },                                      expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },          throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "GET" },                        expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "HEAD" },                       expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "POST" },                       expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },      throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "PUT" },                        expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },       throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "DELETE" },                     expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },    throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "CONNECT" },                    expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "OPTIONS" },                    expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "PATCH" },                      expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },     throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { body: "NonNull2" },                     expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "POST", redirect: "follow" },     throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "GET", body: "NonNull2" },      expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "HEAD", body: "NonNull2" },     expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "POST", body: "NonNull2" },     expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "POST", redirect: "follow" },     throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "PUT", body: "NonNull2" },      expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "PUT", redirect: "follow" },      throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "DELETE", body: "NonNull2" },   expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "DELETE", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "CONNECT", body: "NonNull2" },  expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "CONNECT", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull1" } },    init: { method: "OPTIONS", body: "NonNull2" },  expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "OPTIONS", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "GET", body: null },            expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrl, init: { method: "POST", body: "NonNull" } },     init: { method: "HEAD", body: null },           expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },           throwError: false },
         ];
 
         Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
           if (testCase.throwError) {
             (() -> new Request(
-              new Request(dummyUrl, testCase.request),
+              new Request(testCase.request.input, testCase.request.init),
               testCase.init
             )).should.throwAnything();
             resolve(null);
           } else {
             final req = new Request(
-              new Request(dummyUrl, testCase.request),
+              new Request(testCase.request.input, testCase.request.init),
               testCase.init
+            );
+            req.url.should.be(testCase.expect.url);
+            req.method.should.be(testCase.expect.method);
+            req.redirect.should.be(testCase.expect.redirect);
+
+            testCase.expect.headers.forEach(headerPair -> {
+              req.headers.get(headerPair[0]).should.be(headerPair[1]);
+            });
+
+            if (testCase.expect.body == null) {
+              req.body.should.be(null);
+              resolve(null);
+            } else {
+              RequestTest.bodyToString(cast req.body).then(bodyText -> {
+                bodyText.should.be(testCase.expect.body);
+                resolve(null);
+              }, reject);
+            }
+          }
+        }))).then(cast done, fail);
+      });
+
+      it("should return Request that has expected properties (new Request(string, new Request(request, init)))", (done) -> {
+        final testCases: Array<Dynamic> = [
+          { request: { input: dummyUrlSub, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },              init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } } },   init: null,  expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } }, init: null,  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "follow" } },                                                              init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "error" } },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },                                                                         throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "manual" } },                                                              init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "GET" } },                                                                   init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "HEAD" } },                                                                  init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },                                                                       throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST" } },                                                                  init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },                                                                       throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PUT" } },                                                                   init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },                                                                        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "DELETE" } },                                                                init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },                                                                     throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "CONNECT" } },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },                                                                    throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "OPTIONS" } },                                                               init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },                                                                    throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PATCH" } },                                                                 init: null,  expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },                                                                      throwError: false },
+          { request: { input: dummyUrlSub, init: { body: "NonNull" } },                                                                 init: null,  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "GET", body: "NonNull" } },                                                  init: null,  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "HEAD", body: "NonNull" } },                                                 init: null,  expect: {},                                                                                                                                                   throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },                                                 init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },                                                                  throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PUT", body: "NonNull" } },                                                  init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },                                                                   throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "DELETE", body: "NonNull" } },                                               init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },                                                                throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "CONNECT", body: "NonNull" } },                                              init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },                                                               throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "OPTIONS", body: "NonNull" } },                                              init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },                                                               throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PATCH", body: "NonNull" } },                                                init: null,  expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },                                                                 throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] } }, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) },               expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], method: "GET", redirect: "follow" },                         throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: { "content-type": "text/plain", "Accept-Encoding": "deflate" } } },         init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } },    expect: { url: dummyUrl, body: null, headers: [ ["content-type", "application/json"], ["Accept-Encoding", "deflate"] ], method: "GET", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrlSub, init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) } },              init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] },  expect: { url: dummyUrl, body: null, headers: [ ["Content-Type", "image/gif"], ["accept-encoding", "deflate, gzip"] ], method: "GET", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "follow" } },  init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "follow" } },  init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "follow" } },  init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "error" } },   init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "error" } },   init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "error" } },   init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "manual" } },  init: { redirect: "follow" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "manual" } },  init: { redirect: "error" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "error" },             throwError: false },
+          { request: { input: dummyUrlSub, init: { redirect: "manual" } },  init: { redirect: "manual" },                                   expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "manual" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PATCH" } },     init: { method: "GET" },                                        expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "GET" } },       init: { method: "HEAD" },                                       expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },           throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "HEAD" } },      init: { method: "POST" },                                       expect: { url: dummyUrl, body: null, headers: [], method: "POST", redirect: "follow" },           throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST" } },      init: { method: "PUT" },                                        expect: { url: dummyUrl, body: null, headers: [], method: "PUT", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "PUT" } },       init: { method: "DELETE" },                                     expect: { url: dummyUrl, body: null, headers: [], method: "DELETE", redirect: "follow" },         throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "DELETE" } },    init: { method: "CONNECT" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "CONNECT", redirect: "follow" },        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "CONNECT" } },   init: { method: "OPTIONS" },                                    expect: { url: dummyUrl, body: null, headers: [], method: "OPTIONS", redirect: "follow" },        throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "OPTIONS" } },   init: { method: "PATCH" },                                      expect: { url: dummyUrl, body: null, headers: [], method: "PATCH", redirect: "follow" },          throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "GET" },                        expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "HEAD" },                       expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "POST" },                       expect: { url: dummyUrl, body: "NonNull", headers: [], method: "POST", redirect: "follow" },      throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "PUT" },                        expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PUT", redirect: "follow" },       throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "DELETE" },                     expect: { url: dummyUrl, body: "NonNull", headers: [], method: "DELETE", redirect: "follow" },    throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "CONNECT" },                    expect: { url: dummyUrl, body: "NonNull", headers: [], method: "CONNECT", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "OPTIONS" },                    expect: { url: dummyUrl, body: "NonNull", headers: [], method: "OPTIONS", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "PATCH" },                      expect: { url: dummyUrl, body: "NonNull", headers: [], method: "PATCH", redirect: "follow" },     throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { body: "NonNull2" },                     expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "POST", redirect: "follow" },     throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "GET", body: "NonNull2" },      expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "HEAD", body: "NonNull2" },     expect: {},                                                                                       throwError: true },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "POST", body: "NonNull2" },     expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "POST", redirect: "follow" },     throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "PUT", body: "NonNull2" },      expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "PUT", redirect: "follow" },      throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "DELETE", body: "NonNull2" },   expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "DELETE", redirect: "follow" },   throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "CONNECT", body: "NonNull2" },  expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "CONNECT", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull1" } },    init: { method: "OPTIONS", body: "NonNull2" },  expect: { url: dummyUrl, body: "NonNull2", headers: [], method: "OPTIONS", redirect: "follow" },  throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "GET", body: null },            expect: { url: dummyUrl, body: null, headers: [], method: "GET", redirect: "follow" },            throwError: false },
+          { request: { input: dummyUrlSub, init: { method: "POST", body: "NonNull" } },     init: { method: "HEAD", body: null },           expect: { url: dummyUrl, body: null, headers: [], method: "HEAD", redirect: "follow" },           throwError: false },
+        ];
+
+        Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
+          if (testCase.throwError) {
+            (() -> new Request(
+              dummyUrl,
+              new Request(new Request(testCase.request.input, testCase.request.init), testCase.init)
+            )).should.throwAnything();
+            resolve(null);
+          } else {
+            final req = new Request(
+              dummyUrl,
+              new Request(new Request(testCase.request.input, testCase.request.init), testCase.init)
             );
             req.url.should.be(testCase.expect.url);
             req.method.should.be(testCase.expect.method);
