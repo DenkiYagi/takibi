@@ -27,7 +27,7 @@ class Response extends Body {
             statusText = ((cast init).hasOwnProperty("statusText"))
                 ? "" + init.statusText
                 : Response.getDefaultStatusText(status);
-            headers = (Std.is(init.headers, Headers)) ? new Headers(init.headers) : new Headers();
+            headers = new Headers(init.headers);
         } else {
             status = 200;
             statusText = Response.getDefaultStatusText(status);
