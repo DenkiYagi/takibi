@@ -5,20 +5,38 @@ using buddy.Should;
 using cloudflareworkers.emulator.Response;
 
 class ResponseTest extends BuddySuite {
-  public function new() {
-    describe("Response.new()", {
-      it("should has 200 status", {
-        final response = new Response();
-        response.status.should.be(200);
-        response.statusText.should.be("");
-      });
+    public function new() {
+        describe("Response.new()", {
+            it("should return Response that has default properties(new Response())", {
+                final expect = { url: "", redirected: false, ok: true, status: 200, statusText: "OK", body: null };
+                final responses: Array<Response> = [
+                    new Response(),
+                    new Response(null),
+                    new Response(null, {})
+                ];
 
-      it("should has init status", {
-        final init = { status: 500, statusText: "Internal Server Error" };
-        final response = new Response("", init);
-        response.status.should.be(init.status);
-        response.statusText.should.be(init.statusText);
-      });
-    });
-  }
+                for (res in responses) {
+                    res.url.should.be(expect.url);
+                    res.redirected.should.be(expect.redirected);
+                    res.ok.should.be(expect.ok);
+                    res.status.should.be(expect.status);
+                    res.statusText.should.be(expect.statusText);
+                    res.body.should.be(expect.body);
+                    res.headers.entries().next().done.should.be(true);
+                }
+            });
+
+            it("should return Response that has expected properties(new Response(body))", {
+
+            });
+
+            it("should return Response that has expected properties(new Response(null, init))", {
+                
+            });
+
+            it("should return Response that has expected properties(new Response(body, init))", {
+
+            });
+        });
+    }
 }
