@@ -13,20 +13,27 @@ import js.npm.webstreams_polyfill.ReadableStreamDefaultController;
 
 @:keep
 class Response extends Body {
-    public final status:Int;
-    public final statusText:String;
-    public final headers:Headers;
+    public var status(default, null):Int;
+    public var statusText(default, null):String;
+    public var headers(default, null):Headers;
+    public var ok(default, null):Bool;
+    public var redirected(default, null):Bool;
+    public var url(default, null):String;
+    //public var webSocket(default, null);
 
     public function new(?body:BodySource, ?init:ResponseInit) {
         if (init != null) {
             status = (init.status != null) ? init.status : 200;
-            statusText = (init.statusText != null) ? init.statusText : "";
+            statusText = (init.statusText != null) ? init.statusText : Response.getDefaultStatusText(status);
             headers = (Std.is(init.headers, Headers)) ? new Headers(init.headers) : new Headers();
         } else {
             status = 200;
-            statusText = "";
+            statusText = Response.getDefaultStatusText(status);
             headers = new Headers();
         }
+        url = "";
+        redirected = false;
+        ok = (200 <= status) && (status < 300);
 
         // final stream = if (Syntax.instanceof(body, ArrayBuffer)) {
         //     new ReadableStream(new WebReadableStream({
@@ -50,6 +57,16 @@ class Response extends Body {
         //     null;
         // }
         super(body);
+    }
+
+    public function redirect() {}
+    public function clone() {}
+
+    private static function getDefaultStatusText(status: Int): String {
+        return switch (status) {
+            case 200: "OK";
+            case _: "";
+        }
     }
 }
 
