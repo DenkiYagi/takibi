@@ -1,10 +1,36 @@
 package cloudflareworkers.emulator;
 
 import buddy.BuddySuite;
+import js.lib.Promise;
+import js.lib.Uint8Array;
+import js.node.Buffer;
+import js.node.util.TextEncoder;
+import js.node.url.URLSearchParams;
+import js.npm.webstreams_polyfill.ReadableByteStreamController;
+import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
+import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
 using buddy.Should;
 using cloudflareworkers.emulator.Response;
 
 class ResponseTest extends BuddySuite {
+    static function bodyToString(body: ReadableStream): Promise<String> {
+        return new Promise((resolve, reject) -> {
+            var resultText = "";
+            final reader = cast body.getReader();
+            function push() {
+                reader.read().then(result -> {
+                    if (result.done) {
+                        resolve(resultText);
+                    } else {
+                        resultText += Buffer.from(result.value).toString();
+                        push();
+                    }
+                }, reject);
+            }
+            push();
+        });
+    }
+
     public function new() {
         describe("Response.new()", {
             it("should return Response that has default properties(new Response())", {
@@ -27,8 +53,41 @@ class ResponseTest extends BuddySuite {
                 }
             });
 
-            it("should return Response that has expected properties(new Response(body))", {
+            it("should return Response that has expected properties(new Response(body))", (done) -> {
+                final sampleFormData = new FormData();
+                sampleFormData.append("key", "value");
+                final sampleReadableStream = new ReadableStream(new WebReadableStream({
+                    type: Bytes,
+                    start: (controller: ReadableByteStreamController) -> {
+                        controller.enqueue(new TextEncoder().encode("ReadableStream"));
+                        controller.close();
+                    }
+                }));
+                final sampleUrlSearchParams = new URLSearchParams({symbols:" `~!@#$%^&*()-_=+[{]};:'\"<,>.?/|\\", seconds:"null"});
+                final testCases:Array<Dynamic> = [
+                    { body: "UVString",             expect: { url: "", redirected: false, ok: true, headers: [["content-type", "text/plain;charset=UTF-8"]], status: 200, statusText: "OK", body: "UVString" } },
+                    { body: sampleUrlSearchParams,  expect: { url: "", redirected: false, ok: true, headers: [["content-type", "application/x-www-form-urlencoded;charset=UTF-8"]], status: 200, statusText: "OK", body: sampleUrlSearchParams.toString() } },
+                    //{ body: sampleFormData,         expect: { url: "", redirected: false, ok: true, headers: [["content-type", "multipart/form-data; boundary=" + (cast sampleFormData).getBoundary()]], status: 200, statusText: "OK", body: null } },
+                    { body: sampleReadableStream,   expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "OK", body: "ReadableStream" } },
+                ];
 
+                Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
+                    final res = new Response(testCase.body);
+                    res.url.should.be(testCase.expect.url);
+                    res.redirected.should.be(testCase.expect.redirected);
+                    res.ok.should.be(testCase.expect.ok);
+                    res.status.should.be(testCase.expect.status);
+                    res.statusText.should.be(testCase.expect.statusText);
+
+                    testCase.expect.headers.forEach(headerPair -> {
+                        res.headers.get(headerPair[0]).should.be(headerPair[1]);
+                    });
+
+                    ResponseTest.bodyToString(res.body).then(bodyText -> {
+                        bodyText.should.be(testCase.expect.body);
+                        resolve(null);
+                    }, reject);
+                }))).then(cast done, fail);
             });
 
             it("should return Response that has expected properties(new Response(null, init))", {
