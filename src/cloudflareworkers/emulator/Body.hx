@@ -1,24 +1,58 @@
 package cloudflareworkers.emulator;
 
+import js.Syntax;
 import cloudflareworkers.emulator.ReadableStream.ReadableStreamBYOBReader;
 import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.Json;
 import haxe.extern.EitherType;
-import haxe.macro.Expr.Error;
+import js.lib.DataView;
+import js.lib.ArrayBufferView;
 import js.lib.ArrayBuffer;
 import js.lib.BufferSource;
 import js.lib.Error.TypeError;
 import js.lib.Promise;
-import js.lib.Uint8Array;
 import js.node.Buffer;
 import js.node.url.URLSearchParams;
+import js.node.util.TextEncoder;
+import js.npm.webstreams_polyfill.ReadableByteStreamController;
+import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
+import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
 
 @:keep
 class Body {
+    var rawBody:BodySource;
+    var readableBody:ReadableStream;
     /**
         A simple getter that exposes a ReadableStream of the contents.
     **/
-    public var body(default, null):BodySource;
+    public var body(get, null):ReadableStream;
+    public function get_body(): ReadableStream {
+        if (readableBody != null) {
+            return readableBody;
+        }
+        if (rawBody == null || Std.is(rawBody, ReadableStream)) {
+            return (readableBody = rawBody);
+        }
+
+        var buffer: Dynamic;
+        if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
+            buffer = (ArrayBuffer.isView(rawBody)) ? cast (rawBody, ArrayBufferView) : new DataView(rawBody);
+        } else if (Std.is(rawBody, FormData)) {
+            buffer = (cast rawBody).getBuffer();
+        } else if (Std.is(rawBody, URLSearchParams)) {
+            buffer = cast (rawBody, URLSearchParams).toString();
+        } else {
+            buffer = new TextEncoder().encode(cast (rawBody, String));
+        }
+
+        return (readableBody = new ReadableStream(new WebReadableStream({
+            type: Bytes,
+            start: (controller:ReadableByteStreamController) -> {
+                controller.enqueue(buffer);
+                controller.close();
+            }
+        })));
+    }
 
     /**
         A Boolean that declares if the body has been used in a response.
@@ -26,7 +60,7 @@ class Body {
     public var bodyUsed(default, null):Bool;
 
     function new(?body:BodySource) {
-        this.body = body;
+        rawBody = body;
     }
  
     /**
