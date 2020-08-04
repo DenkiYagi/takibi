@@ -1,5 +1,6 @@
 package cloudflareworkers.emulator;
 
+import cloudflareworkers.emulator.Body.BodySource;
 import js.lib.Object;
 import js.Lib;
 import js.lib.Error.TypeError;
@@ -76,23 +77,13 @@ class Request extends Body {
         }
     }
 
-    function toReadableStream(method:RequestMethod, body:Null<EitherType<String, ReadableStream>>):Null<ReadableStream> {
+    function toReadableStream(method:RequestMethod, body:Null<EitherType<String, ReadableStream>>):Null<BodySource> {
         return switch (method) {
             case GET | HEAD:
                 if (body != null) throw new TypeError("Request with a GET or HEAD method cannot have a body.");
                 null;
-            case _ if (Std.is(body, ReadableStream)):
-                (body : ReadableStream);
-            case _ if (Std.is(body, String)):
-                new ReadableStream(new WebReadableStream({
-                    type: Bytes,
-                    start: (controller:ReadableByteStreamController) -> {
-                        controller.enqueue(new TextEncoder().encode(body));
-                        controller.close();
-                    }
-                }));
             case _:
-                null;
+                cast body;
         }
     }
 
@@ -100,13 +91,13 @@ class Request extends Body {
         Creates a copy of the current Request object.
     **/
     public function clone():Request {
-        if (Std.is(body, ReadableStream)) {
+        if (Std.is(rawBody, ReadableStream)) {
             final teedStreams: Array<ReadableStream> = (cast body).tee();
             final clonedRequest = new Request(this, { body: teedStreams[0] });
             body = teedStreams[1];
             return clonedRequest;
         }
-        return new Request(this);
+        return new Request(this, { body: cast rawBody });
     }
 }
 
