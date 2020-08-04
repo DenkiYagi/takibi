@@ -41,6 +41,16 @@ class Response extends Body {
             throw new js.lib.Error.RangeError("Responses may only be constructed with status codes in the range 200 to 599, inclusive.");
         }
 
+        if (!headers.has("content-type") && body != null) {
+            if (Std.is(body, String)) {
+                headers.append("content-type", "text/plain;charset=UTF-8");
+            } else if (Std.is(body, FormData)) {
+                headers.append("content-type", "multipart/form-data; boundary=" + (cast body).getBoundary());
+            } else if (Std.is(body, URLSearchParams)) {
+                headers.append("content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+            }
+        }
+
         // final stream = if (Syntax.instanceof(body, ArrayBuffer)) {
         //     new ReadableStream(new WebReadableStream({
         //         start: (ctrl:ReadableStreamDefaultController<Uint8Array>) -> {
