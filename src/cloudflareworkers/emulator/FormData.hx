@@ -7,11 +7,11 @@ import haxe.extern.EitherType;
 class FormData {
     final map:Map<String, Array<String>>;
 
-    function new():Void {
+    public function new():Void {
         this.map = new Map();
     }
 
-    function append(name:String, value:String):Void {
+    public function append(name:String, value:String):Void {
         if (map.has(name)) {
             map.get(name).push(value);
         } else {
@@ -19,11 +19,11 @@ class FormData {
         }
     }
 
-    function delete(name:String):Void {
+    public function delete(name:String):Void {
         map.delete(name);
     }
 
-    function get(name:String):Null<String> {
+    public function get(name:String):Null<String> {
         final items = map.get(name);
         return if (items != null && items.length > 0) {
             items[0];
@@ -32,19 +32,19 @@ class FormData {
         }
     }
 
-    function getAll(name:String):Array<String> {
+    public function getAll(name:String):Array<String> {
         return map.get(name).copy();
     }
 
-    function has(name:String):Bool {
+    public function has(name:String):Bool {
         return map.has(name);
     }
 
-    function set(name:String, value:String):Void {
+    public function set(name:String, value:String):Void {
         map.set(name, [value]);
     }
 
-    function entries():js.lib.Iterator<KeyValue<String, String>> {
+    public function entries():js.lib.Iterator<KeyValue<String, String>> {
         if (map.size <= 0) return new EmptyIterator();
 
         final keyIterator = map.keys();
@@ -67,11 +67,11 @@ class FormData {
         }
     }
 
-    function keys():js.lib.Iterator<String> {
+    public function keys():js.lib.Iterator<String> {
         return map.keys();
     }
 
-    function values():js.lib.Iterator<String> {
+    public function values():js.lib.Iterator<String> {
         if (map.size <= 0) return new EmptyIterator();
 
         final valueIterator = map.values();
