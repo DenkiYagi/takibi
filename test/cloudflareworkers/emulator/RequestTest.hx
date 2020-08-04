@@ -10,7 +10,7 @@ class RequestTest extends BuddySuite {
     static function bodyToString(body: ReadableStream): Promise<String> {
         return new Promise((resolve, reject) -> {
             var resultText = "";
-            final reader = body._raw.getReader();
+            final reader = cast body.getReader();
             function push() {
                 reader.read().then(result -> {
                     if (result.done) {
