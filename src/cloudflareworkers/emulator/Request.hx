@@ -58,10 +58,7 @@ class Request extends Body {
 
             var _body:Null<EitherType<String, ReadableStream>> = cast _input.body;
             if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
-                // clone and lock self stream
-                final teedStreams:Array<ReadableStream> = (cast _body).tee();
-                _body = teedStreams[0];
-                teedStreams[1].cancel("");
+                _body = (cast _body).pipeThrough(new TransformStream());
             }
             super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : _body));
         }
