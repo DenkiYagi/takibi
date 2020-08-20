@@ -68,7 +68,13 @@ class Request extends Body {
         return if (init == null) {
             {};
         } else if (Std.is(init, Request)) {
-            init;
+            final _init = cast(init, Request);
+            {
+                method: _init.method,
+                headers: _init.headers,
+                body: _init.body,
+                redirect: _init.redirect
+            };
         } else {
             init;
         }
