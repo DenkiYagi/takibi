@@ -1,8 +1,5 @@
 package cloudflareworkers.emulator;
 
-import js.Syntax;
-import cloudflareworkers.emulator.ReadableStream.ReadableStreamBYOBReader;
-import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.Json;
 import haxe.extern.EitherType;
 import js.lib.DataView;
@@ -38,9 +35,9 @@ class Body {
         if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
             buffer = (ArrayBuffer.isView(rawBody)) ? cast (rawBody, ArrayBufferView) : new DataView(rawBody);
         } else if (Std.is(rawBody, FormData)) {
-            buffer = (cast rawBody).getBuffer();
+            buffer = new TextEncoder().encode((cast rawBody).toString());
         } else if (Std.is(rawBody, URLSearchParams)) {
-            buffer = cast (rawBody, URLSearchParams).toString();
+            buffer = new TextEncoder().encode(cast (rawBody, URLSearchParams).toString());
         } else {
             buffer = new TextEncoder().encode(cast (rawBody, String));
         }
