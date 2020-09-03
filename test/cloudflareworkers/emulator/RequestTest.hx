@@ -1,5 +1,6 @@
 package cloudflareworkers.emulator;
 
+import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import buddy.BuddySuite;
 import js.lib.Promise;
 import js.node.Buffer;
@@ -10,7 +11,7 @@ class RequestTest extends BuddySuite {
     static function bodyToString(body: ReadableStream): Promise<String> {
         return new Promise((resolve, reject) -> {
             var resultText = "";
-            final reader = cast body.getReader();
+            final reader: ReadableStreamDefaultReader = body.getReader();
             function push() {
                 reader.read().then(result -> {
                     if (result.done) {
@@ -87,7 +88,7 @@ class RequestTest extends BuddySuite {
                             req.body.should.be(null);
                             resolve(null);
                         } else {
-                            RequestTest.bodyToString(cast req.body).then(bodyText -> {
+                            RequestTest.bodyToString(req.body).then(bodyText -> {
                                 bodyText.should.be(testCase.expect.body);
                                 resolve(null);
                             }, reject);
@@ -142,7 +143,7 @@ class RequestTest extends BuddySuite {
                             req.body.should.be(null);
                             resolve(null);
                         } else {
-                            RequestTest.bodyToString(cast req.body).then(bodyText -> {
+                            RequestTest.bodyToString(req.body).then(bodyText -> {
                                 bodyText.should.be(testCase.expect.body);
                                 resolve(null);
                             }, reject);
@@ -195,7 +196,7 @@ class RequestTest extends BuddySuite {
                         resolve(null);
                     } else {
                         (cast ((cast source.body).locked, Bool)).should.be(true);
-                        RequestTest.bodyToString(cast dest.body).then(bodyText -> {
+                        RequestTest.bodyToString(dest.body).then(bodyText -> {
                             bodyText.should.be((cast testCase.request.init).body);
                             resolve(null);
                         }, reject);
@@ -292,7 +293,7 @@ class RequestTest extends BuddySuite {
                             req.body.should.be(null);
                             resolve(null);
                         } else {
-                            RequestTest.bodyToString(cast req.body).then(bodyText -> {
+                            RequestTest.bodyToString(req.body).then(bodyText -> {
                                 bodyText.should.be(testCase.expect.body);
                                 resolve(null);
                             }, reject);
@@ -390,7 +391,7 @@ class RequestTest extends BuddySuite {
                             req.body.should.be(null);
                             resolve(null);
                         } else {
-                            RequestTest.bodyToString(cast req.body).then(bodyText -> {
+                            RequestTest.bodyToString(req.body).then(bodyText -> {
                                 bodyText.should.be(testCase.expect.body);
                                 resolve(null);
                             }, reject);
@@ -445,8 +446,8 @@ class RequestTest extends BuddySuite {
                         resolve(null);
                     } else {
                         Promise.all([
-                            RequestTest.bodyToString(cast source.body),
-                            RequestTest.bodyToString(cast dest.body)
+                            RequestTest.bodyToString(source.body),
+                            RequestTest.bodyToString(dest.body)
                         ]).then(results -> {
                             results[0].should.be(results[1]);
                             resolve(null);
