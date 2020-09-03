@@ -54,8 +54,6 @@ class ResponseTest extends BuddySuite {
             });
 
             it("should return Response that has expected properties(new Response(body))", (done) -> {
-                final sampleFormData = new FormData();
-                sampleFormData.append("key", "value");
                 final sampleReadableStream = new ReadableStream(new WebReadableStream({
                     type: Bytes,
                     start: (controller: ReadableByteStreamController) -> {
@@ -66,8 +64,7 @@ class ResponseTest extends BuddySuite {
                 final sampleUrlSearchParams = new URLSearchParams({symbols:" `~!@#$%^&*()-_=+[{]};:'\"<,>.?/|\\", seconds:"null"});
                 final testCases:Array<Dynamic> = [
                     { body: "UVString",             expect: { url: "", redirected: false, ok: true, headers: [["content-type", "text/plain;charset=UTF-8"]], status: 200, statusText: "OK", body: "UVString" } },
-                    { body: sampleUrlSearchParams,  expect: { url: "", redirected: false, ok: true, headers: [["content-type", "application/x-www-form-urlencoded;charset=UTF-8"]], status: 200, statusText: "OK", body: sampleUrlSearchParams.toString() } },
-                    //{ body: sampleFormData,         expect: { url: "", redirected: false, ok: true, headers: [["content-type", "multipart/form-data; boundary=" + (cast sampleFormData).getBoundary()]], status: 200, statusText: "OK", body: null } },
+                    { body: sampleUrlSearchParams,  expect: { url: "", redirected: false, ok: true, headers: [["content-type", "application/x-www-form-urlencoded;charset=UTF-8"]], status: 200, statusText: "OK", body: "symbols=+%60%7E%21%40%23%24%25%5E%26*%28%29-_%3D%2B%5B%7B%5D%7D%3B%3A%27%22%3C%2C%3E.%3F%2F%7C%5C&seconds=null" } },
                     { body: sampleReadableStream,   expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "OK", body: "ReadableStream" } },
                 ];
 
@@ -85,6 +82,34 @@ class ResponseTest extends BuddySuite {
 
                     ResponseTest.bodyToString(res.body).then(bodyText -> {
                         bodyText.should.be(testCase.expect.body);
+                        resolve(null);
+                    }, reject);
+                }))).then(cast done, fail);
+            });
+
+            it("should return Response that has expected properties(new Response(FormData))", (done) -> {
+                final sampleFormData = new FormData();
+                sampleFormData.append("key", "value");
+                sampleFormData.append("key", "value2");
+                final testCases:Array<Dynamic> = [
+                    { body: sampleFormData, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK" } },
+                ];
+                final contentTypeExpect = ~/^multipart\/form-data; boundary=([-0-9a-z'()+_,.\/:=?]{1,70})/i;
+
+                Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
+                    final res = new Response(testCase.body);
+                    res.url.should.be(testCase.expect.url);
+                    res.redirected.should.be(testCase.expect.redirected);
+                    res.ok.should.be(testCase.expect.ok);
+                    res.status.should.be(testCase.expect.status);
+                    res.statusText.should.be(testCase.expect.statusText);
+
+                    contentTypeExpect.match(res.headers.get("content-type")).should.be(true);
+                    final boundary = "--" + contentTypeExpect.replace(res.headers.get("content-type"), "$1");
+
+                    ResponseTest.bodyToString(res.body).then(bodyText -> {
+                        StringTools.startsWith(bodyText, boundary).should.be(true);
+                        StringTools.endsWith(StringTools.trim(bodyText), boundary + "--").should.be(true);
                         resolve(null);
                     }, reject);
                 }))).then(cast done, fail);
