@@ -61,6 +61,7 @@ class FormData {
                     }
                     final val = valueIterator.next();
                     if (!val.done) return {done: false, value: new KeyValue(currentKey, val.value)};
+                    else valueIterator = null;
                 }
                 return {done: true};
             }
