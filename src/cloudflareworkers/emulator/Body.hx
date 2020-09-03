@@ -1,5 +1,6 @@
 package cloudflareworkers.emulator;
 
+import js.lib.HaxeIterator;
 import haxe.Json;
 import haxe.extern.EitherType;
 import js.lib.DataView;
@@ -19,6 +20,7 @@ import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
 class Body {
     var rawBody:BodySource;
     var readableBody:ReadableStream;
+    var formDataBoundary:String;
     /**
         A simple getter that exposes a ReadableStream of the contents.
     **/
@@ -35,7 +37,7 @@ class Body {
         if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
             buffer = (ArrayBuffer.isView(rawBody)) ? cast (rawBody, ArrayBufferView) : new DataView(rawBody);
         } else if (Std.is(rawBody, FormData)) {
-            buffer = new TextEncoder().encode((cast rawBody).toString());
+            buffer = new TextEncoder().encode(generateFormDataString());
         } else if (Std.is(rawBody, URLSearchParams)) {
             buffer = new TextEncoder().encode(cast (rawBody, URLSearchParams).toString());
         } else {
@@ -59,7 +61,7 @@ class Body {
     function new(?body:BodySource) {
         rawBody = body;
     }
- 
+
     /**
         Returns a promise that resolves with an ArrayBuffer representation of the request body.
     **/
@@ -163,6 +165,34 @@ class Body {
             return Promise.resolve("");
         }
         return Promise.reject(new TypeError());
+    }
+
+    function getBoundary() {
+        if (formDataBoundary != null) return formDataBoundary;
+        final tmp = new StringBuf();
+        for (_ in 0...32) {
+            tmp.add(StringTools.hex(Std.random(16)).toLowerCase());
+        }
+        formDataBoundary = tmp.toString();
+        return formDataBoundary;
+    }
+    function generateFormDataString() {
+        final boundary = "--" + getBoundary();
+        if (!Std.is(rawBody, FormData)) return "";
+        final tmp = new StringBuf();
+        final formData = cast (rawBody, FormData);
+
+        for (kv in new HaxeIterator(formData.entries())) {
+            tmp.add(boundary);
+            tmp.add("\r\nContent-Disposition: form-data; name=\"");
+            tmp.add(kv.key);
+            tmp.add("\"\r\n\r\n");
+            tmp.add(kv.value);
+            tmp.add("\r\n");
+        }
+        tmp.add(boundary);
+        tmp.add("--\r\n");
+        return tmp.toString();
     }
 }
 
