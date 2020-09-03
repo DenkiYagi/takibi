@@ -45,7 +45,7 @@ class Response extends Body {
             if (Std.is(body, String)) {
                 headers.append("content-type", "text/plain;charset=UTF-8");
             } else if (Std.is(body, FormData)) {
-                headers.append("content-type", "multipart/form-data; boundary=" + (cast body).getBoundary());
+                headers.append("content-type", "multipart/form-data; boundary=" + this.getBoundary());
             } else if (Std.is(body, URLSearchParams)) {
                 headers.append("content-type", "application/x-www-form-urlencoded;charset=UTF-8");
             }
