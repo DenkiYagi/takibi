@@ -91,8 +91,10 @@ class ResponseTest extends BuddySuite {
                 final sampleFormData = new FormData();
                 sampleFormData.append("key", "value");
                 sampleFormData.append("key", "value2");
+                final sampleFormData2 = new FormData();
                 final testCases:Array<Dynamic> = [
                     { body: sampleFormData, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK" } },
+                    { body: sampleFormData2, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK" } },
                 ];
                 final contentTypeExpect = ~/^multipart\/form-data; boundary=([-0-9a-z'()+_,.\/:=?]{1,70})/i;
 
@@ -108,6 +110,7 @@ class ResponseTest extends BuddySuite {
                     final boundary = "--" + contentTypeExpect.replace(res.headers.get("content-type"), "$1");
 
                     ResponseTest.bodyToString(res.body).then(bodyText -> {
+                        // TODO: boundaryしか確認できていない。
                         StringTools.startsWith(bodyText, boundary).should.be(true);
                         StringTools.endsWith(StringTools.trim(bodyText), boundary + "--").should.be(true);
                         resolve(null);
@@ -219,9 +222,35 @@ class ResponseTest extends BuddySuite {
                 }
             });
 
-            it("should return Response that has expected properties(new Response(body, init))", {
+            //it("should return Response that has expected properties(new Response(body, init))", (done) -> {
+            //    final testCases:Array<Dynamic> = [
+            //        { body: "USVString", init: { statusText: null },               expect: { url: "", redirected: false, ok: true, headers: [['content-type', 'text/plaing;charset=UTF-8']], status: 200, statusText: "null", body: null }, throwError: false },
+            //        { body: "USVString", init: { statusText: "No Problem" },               expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "No Problem", body: null }, throwError: false },
+            //        { body: , init: { status: 210, statusText: "No Problem" },  expect: { url: "", redirected: false, ok: true, headers: [], status: 210, statusText: "No Problem", body: null }, throwError: false },
+            //        { body: , init: { status: 310, statusText: "" },            expect: { url: "", redirected: false, ok: false, headers: [], status: 310, statusText: "", body: null }, throwError: false },
+            //        { body: , init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) }, expect: { url: "", redirected: false, ok: true, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], status: 200, statusText: "OK", body: null } },
+            //        { body: , init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] }, expect: { url: "", redirected: false, ok: true, headers: [ ["Content-Type","image/gif"], ["Accept-Encoding", "deflate, gzip"] ], status: 200, statusText: "OK", body: null } },
+            //        { body: , init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } }, expect: { url: "", redirected: false, ok: true, headers:  [ ["Content-type", "application/json"], ["Accept-Encoding", "deflate"] ], status: 200, statusText: "OK", body: null } },
+            //    ];
 
-            });
+            //    Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
+            //        final res = new Response(testCase.body);
+            //        res.url.should.be(testCase.expect.url);
+            //        res.redirected.should.be(testCase.expect.redirected);
+            //        res.ok.should.be(testCase.expect.ok);
+            //        res.status.should.be(testCase.expect.status);
+            //        res.statusText.should.be(testCase.expect.statusText);
+
+            //        testCase.expect.headers.forEach(headerPair -> {
+            //            res.headers.get(headerPair[0]).should.be(headerPair[1]);
+            //        });
+
+            //        ResponseTest.bodyToString(res.body).then(bodyText -> {
+            //            bodyText.should.be(testCase.expect.body);
+            //            resolve(null);
+            //        }, reject);
+            //    }))).then(cast done, fail);
+            //});
         });
     }
 }
