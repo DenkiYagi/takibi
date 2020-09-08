@@ -93,8 +93,8 @@ class ResponseTest extends BuddySuite {
                 sampleFormData.append("key", "value2");
                 final sampleFormData2 = new FormData();
                 final testCases:Array<Dynamic> = [
-                    { body: sampleFormData, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK" } },
-                    { body: sampleFormData2, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK" } },
+                    { body: sampleFormData, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK", body: ["", "\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n", "\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue2\r\n", "--\r\n" ] } },
+                    { body: sampleFormData2, expect: { url: "", redirected: false, ok: true, status: 200, statusText: "OK", body: ["", "--\r\n" ] } },
                 ];
                 final contentTypeExpect = ~/^multipart\/form-data; boundary=([-0-9a-z'()+_,.\/:=?]{1,70})/i;
 
@@ -110,9 +110,7 @@ class ResponseTest extends BuddySuite {
                     final boundary = "--" + contentTypeExpect.replace(res.headers.get("content-type"), "$1");
 
                     ResponseTest.bodyToString(res.body).then(bodyText -> {
-                        // TODO: boundaryしか確認できていない。
-                        StringTools.startsWith(bodyText, boundary).should.be(true);
-                        StringTools.endsWith(StringTools.trim(bodyText), boundary + "--").should.be(true);
+                        bodyText.should.be(testCase.expect.body.join(boundary));
                         resolve(null);
                     }, reject);
                 }))).then(cast done, fail);
@@ -223,9 +221,10 @@ class ResponseTest extends BuddySuite {
             });
 
             //it("should return Response that has expected properties(new Response(body, init))", (done) -> {
+            //    final sampleFormData2 = new FormData();
             //    final testCases:Array<Dynamic> = [
-            //        { body: "USVString", init: { statusText: null },               expect: { url: "", redirected: false, ok: true, headers: [['content-type', 'text/plaing;charset=UTF-8']], status: 200, statusText: "null", body: null }, throwError: false },
-            //        { body: "USVString", init: { statusText: "No Problem" },               expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "No Problem", body: null }, throwError: false },
+            //        { body: "USVString", init: { statusText: null },               expect: { url: "", redirected: false, ok: true, headers: [['content-type', 'text/plain;charset=UTF-8']], status: 200, statusText: "null", body: null }, throwError: false },
+            //        { body: "USVString", init: { statusText: "No Problem" },       expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "No Problem", body: null }, throwError: false },
             //        { body: , init: { status: 210, statusText: "No Problem" },  expect: { url: "", redirected: false, ok: true, headers: [], status: 210, statusText: "No Problem", body: null }, throwError: false },
             //        { body: , init: { status: 310, statusText: "" },            expect: { url: "", redirected: false, ok: false, headers: [], status: 310, statusText: "", body: null }, throwError: false },
             //        { body: , init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) }, expect: { url: "", redirected: false, ok: true, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], status: 200, statusText: "OK", body: null } },
