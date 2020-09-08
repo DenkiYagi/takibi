@@ -9,7 +9,6 @@ Local emulator for Cloudflare Workers created with Haxe.
 ### Setup
 
 ```sh
-haxe build.hxml
 npm install
 ```
 

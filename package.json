@@ -6,7 +6,8 @@
   "scripts": {
     "test": "haxe test.hxml",
     "build": "haxe build.hxml",
-    "start": "node index"
+    "start": "node index",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
