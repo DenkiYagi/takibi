@@ -78,8 +78,7 @@ class Body {
             } else if (body == null) {
                 resolve(Buffer.alloc(0));
             } else if (Std.is(body, ReadableStream)) {
-                final _body = cast (body, ReadableStream);
-                final reader = _body._raw.getReader();
+                final reader = cast body.getReader();
                 var buf = Buffer.from([]);
 
                 function push() {
@@ -130,8 +129,7 @@ class Body {
             return Promise.resolve("");
         }
         return new Promise((resolve, reject) -> {
-            final _body = cast (body, ReadableStream);
-            final reader = _body._raw.getReader();
+            final reader = cast body.getReader();
             var text = "";
 
             function push() {
