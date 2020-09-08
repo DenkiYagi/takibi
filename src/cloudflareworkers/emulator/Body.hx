@@ -127,44 +127,29 @@ class Body {
         Returns a promise that resolves with an USVString (text) representation of the request body.
     **/
     public function text():Promise<String> {
-        if (Std.is(body, ReadableStream)) {
-            return new Promise((resolve, reject) -> {
-                final _body = cast (body, ReadableStream);
-                final reader = _body._raw.getReader();
-                var text = "";
-
-                function push() {
-                    reader.read().then(result -> {
-                        if (result.done) {
-                            resolve(text);
-                        } else {
-                            text += Buffer.from(result.value).toString();
-                            push();
-                        }
-                    }, reject);
-                }
-                push();
-            });
-        }
-        if (Std.is(body, ArrayBuffer)) {
-            final _body = cast body;
-            return Promise.resolve(_body.toString());
-        }
-        if (Std.is(body, FormData)) {
-            final _body = cast body;
-            return Promise.resolve(_body.entries().reduce((acc, cur) -> (acc + cur[0] + ":" + cur[1] + "\n"), ""));
-        }
-        if (Std.is(body, URLSearchParams)) {
-            final _body = cast body;
-            return Promise.resolve(_body.toString());
-        }
-        if (Std.is(body, String)) {
-            return Promise.resolve(cast (body, String));
+        if (Std.is(rawBody, String)) {
+            return Promise.resolve(cast rawBody);
         }
         if (body == null) {
             return Promise.resolve("");
         }
-        return Promise.reject(new TypeError());
+        return new Promise((resolve, reject) -> {
+            final _body = cast (body, ReadableStream);
+            final reader = _body._raw.getReader();
+            var text = "";
+
+            function push() {
+                reader.read().then(result -> {
+                    if (result.done) {
+                        resolve(text);
+                    } else {
+                        text += Buffer.from(result.value).toString();
+                        push();
+                    }
+                }, reject);
+            }
+            push();
+        });
     }
 
     function getBoundary() {
