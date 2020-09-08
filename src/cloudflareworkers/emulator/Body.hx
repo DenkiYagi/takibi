@@ -67,11 +67,17 @@ class Body {
     **/
     public function arrayBuffer():Promise<ArrayBuffer> {
         // TODO: 仮実装ゆえ要実装修正
-        if (Std.is(body, ArrayBuffer)) {
-            return Promise.resolve(cast (body, ArrayBuffer));
+        if (Std.is(rawBody, ArrayBuffer)) {
+            return Promise.resolve(cast (rawBody, ArrayBuffer));
         }
         return new Promise((resolve, reject) -> {
-            if (Std.is(body, ReadableStream)) {
+            if (Std.is(rawBody, URLSearchParams)) {
+                resolve(Buffer.from(cast (rawBody, URLSearchParams).toString()));
+            } else if (Std.is(rawBody, String)) {
+                resolve(Buffer.from(rawBody));
+            } else if (body == null) {
+                resolve(Buffer.alloc(0));
+            } else if (Std.is(body, ReadableStream)) {
                 final _body = cast (body, ReadableStream);
                 final reader = _body._raw.getReader();
                 var buf = Buffer.from([]);
@@ -87,16 +93,6 @@ class Body {
                     }, reject);
                 }
                 push();
-            } else if (Std.is(body, FormData)) {
-                final _body = cast body;
-                resolve(Buffer.from(_body.entries().reduce((acc, cur) -> (acc + cur[0] + ":" + cur[1] + "\n"), "")));
-            } else if (Std.is(body, URLSearchParams)) {
-                final _body = cast body;
-                resolve(Buffer.from(cast _body.toString()));
-            } else if (Std.is(body, String)) {
-                resolve(Buffer.from(body));
-            } else if (body == null) {
-                resolve(Buffer.alloc(0));
             } else reject(new TypeError());
         }).then(buffer -> {
             return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength);
@@ -108,8 +104,8 @@ class Body {
     **/
     public function formData():Promise<FormData> {
         // TODO: 仮実装ゆえ要実装修正
-        if (Std.is(body, FormData)) {
-            return Promise.resolve(cast (body, FormData));
+        if (Std.is(rawBody, FormData)) {
+            return Promise.resolve(cast (rawBody, FormData));
         }
         return Promise.reject();
     }

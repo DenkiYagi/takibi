@@ -24,7 +24,7 @@ class BodyTest extends BuddySuite {
 
     describe("Body.formData()", {
       it("should return Promise<FormData>", done -> {
-        final body = new Response("");
+        final body = new Response(new FormData());
         final result = body.formData();
         Std.is(result, Promise).should.be(true);
         result.then(ab -> {
