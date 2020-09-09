@@ -81,6 +81,9 @@ class Response extends Body {
         super(body);
     }
 
+    /**
+        Creates a new response with a different URL.
+    **/
     public static function redirect(url:String, status = 302) {
       final redirectedStatuses = [301, 302, 303, 307, 308];
       if (!redirectedStatuses.contains(status)) {
@@ -100,6 +103,9 @@ class Response extends Body {
       });
     }
 
+    /**
+        Creates a clone of a Response object.
+    **/
     public function clone() {
         final init:ResponseInit = {
             status: status,
