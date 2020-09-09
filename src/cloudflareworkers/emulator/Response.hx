@@ -1,7 +1,11 @@
 package cloudflareworkers.emulator;
 
+<<<<<<< HEAD
 import js.html.URL;
 import js.lib.Error.RangeError;
+=======
+import js.lib.HaxeIterator;
+>>>>>>> feature/#3-response-clone
 import cloudflareworkers.emulator.Body.BodySource;
 import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.extern.EitherType;
@@ -96,7 +100,28 @@ class Response extends Body {
       });
     }
 
-    public function clone() {}
+    public function clone() {
+        final init:ResponseInit = {
+            status: status,
+            statusText: statusText,
+            headers: new Headers(headers)
+        };
+        if (Std.is(rawBody, String)) {
+            return new Response(rawBody, init);
+        } else if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
+            return new Response(cast (rawBody, BufferSource).slice(0), init);
+        } else if (Std.is(rawBody, URLSearchParams) || Std.is(rawBody, FormData)) {
+            final _body = cast rawBody;
+            final newBody = Syntax.code("new {0}.constructor()", _body);
+            for (pair in new HaxeIterator(_body.entries())) {
+                newBody.append(pair[0], pair[1]);
+            }
+            return new Response(cast newBody, init);
+        }
+        final teedStreams: Array<ReadableStream> = (cast rawBody).tee();
+        rawBody = teedStreams[1];
+        return new Response(teedStreams[0], init);
+    }
 
     private static function getDefaultStatusText(status: Int): String {
         return switch (status) {
