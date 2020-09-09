@@ -1,5 +1,7 @@
 package cloudflareworkers.emulator;
 
+import js.html.URL;
+import js.lib.Error.RangeError;
 import cloudflareworkers.emulator.Body.BodySource;
 import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.extern.EitherType;
@@ -75,7 +77,25 @@ class Response extends Body {
         super(body);
     }
 
-    public function redirect() {}
+    public static function redirect(url:String, status = 302) {
+      final redirectedStatuses = [301, 302, 303, 307, 308];
+      if (!redirectedStatuses.contains(status)) {
+          throw new RangeError("Uncaught RangeError: Failed to execute 'redirect' on 'Response': Invalid status code");
+      }
+      var location:String;
+      try {
+          location = new URL(url).href;
+      } catch (e) {
+          location = "";
+      }
+      return new Response(null, {
+          headers: {
+              location: location
+          },
+          status: status
+      });
+    }
+
     public function clone() {}
 
     private static function getDefaultStatusText(status: Int): String {
