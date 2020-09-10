@@ -315,9 +315,10 @@ class ResponseTest extends BuddySuite {
 
         describe("Response.redirect()", {
             it("shoud return Response that has expected properties", {
-                final sampleUrl = 'https://google.com/';
-                final testCases = [
+                final sampleUrl = "https://google.com/";
+                final testCases:Array<Dynamic> = [
                     { url: sampleUrl, status: null, expect: { url: sampleUrl, redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: "Invalid URL", status: null, throwError: true },
                 ];
 
                 for (testCase in testCases) {
