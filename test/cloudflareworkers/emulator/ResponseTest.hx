@@ -255,7 +255,10 @@ class ResponseTest extends BuddySuite {
 
         describe("Response.redirect()", {
             it("shoud return Response that has expected properties", {
-                final testCases = [];
+                final sampleUrl = 'https://google.com/';
+                final testCases = [
+                    { url: sampleUrl, status: null, expect: { url: sampleUrl, redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                ];
 
                 for (testCase in testCases) {
                     if (testCase.throwError) {
