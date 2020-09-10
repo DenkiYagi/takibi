@@ -86,12 +86,7 @@ class Response extends Body {
       if (!redirectedStatuses.contains(status)) {
           throw new RangeError("Uncaught RangeError: Failed to execute 'redirect' on 'Response': Invalid status code");
       }
-      var location:String;
-      try {
-          location = new URL(url).href;
-      } catch (e) {
-          location = "";
-      }
+      final location = new URL(url).href;
       return new Response(null, {
           headers: {
               location: location
