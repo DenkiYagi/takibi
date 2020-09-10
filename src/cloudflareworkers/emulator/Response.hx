@@ -1,11 +1,8 @@
 package cloudflareworkers.emulator;
 
-<<<<<<< HEAD
 import js.html.URL;
 import js.lib.Error.RangeError;
-=======
 import js.lib.HaxeIterator;
->>>>>>> feature/#3-response-clone
 import cloudflareworkers.emulator.Body.BodySource;
 import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.extern.EitherType;
