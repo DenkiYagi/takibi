@@ -317,8 +317,21 @@ class ResponseTest extends BuddySuite {
             it("shoud return Response that has expected properties", {
                 final sampleUrl = "https://google.com/";
                 final testCases:Array<Dynamic> = [
-                    { url: sampleUrl, status: null, expect: { url: sampleUrl, redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: sampleUrl, status: null, expect: { url: "", redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: sampleUrl, status: 301, expect: { url: "", redirected: false, ok: false, status: 301, statusText: 'Moved Permanently', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: sampleUrl, status: 302, expect: { url: "", redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: sampleUrl, status: 303, expect: { url: "", redirected: false, ok: false, status: 303, statusText: 'See Other', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: sampleUrl, status: 307, expect: { url: "", redirected: false, ok: false, status: 307, statusText: 'Temporary Redirect', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: sampleUrl, status: 308, expect: { url: "", redirected: false, ok: false, status: 308, statusText: 'Permanent Redirect', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                    { url: "ws://example.com/", expect: { url: "", redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', "ws://example.com/"]] }, throwError: false },
                     { url: "Invalid URL", status: null, throwError: true },
+                    { url: sampleUrl, status: 200, throwError: true },
+                    { url: sampleUrl, status: 300, throwError: true },
+                    { url: sampleUrl, status: 304, throwError: true },
+                    { url: sampleUrl, status: 305, throwError: true },
+                    { url: sampleUrl, status: 306, throwError: true },
+                    { url: sampleUrl, status: 309, throwError: true },
+                    { url: sampleUrl, status: 400, throwError: true },
                 ];
 
                 for (testCase in testCases) {
