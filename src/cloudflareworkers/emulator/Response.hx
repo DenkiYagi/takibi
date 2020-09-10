@@ -104,11 +104,16 @@ class Response extends Body {
             statusText: statusText,
             headers: new Headers(headers)
         };
+        if (rawBody == null) {
+            return new Response(null, init);
+        }
         if (Std.is(rawBody, String)) {
             return new Response(rawBody, init);
-        } else if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
+        }
+        if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
             return new Response(cast (rawBody, BufferSource).slice(0), init);
-        } else if (Std.is(rawBody, URLSearchParams) || Std.is(rawBody, FormData)) {
+        }
+        if (Std.is(rawBody, URLSearchParams) || Std.is(rawBody, FormData)) {
             final _body = cast rawBody;
             final newBody = Syntax.code("new {0}.constructor()", _body);
             for (pair in new HaxeIterator(_body.entries())) {
