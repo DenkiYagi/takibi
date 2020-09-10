@@ -99,6 +99,34 @@ class BodyTest extends BuddySuite {
                     expect: "バッファ",
                 },
             };
+
+            it("should return Promise has expected string", done -> {
+                Promise.all([
+                    new Response(samples.none.body).text(),
+                    new Response(samples.string.body).text(),
+                    new Response(samples.urlSearchParams.body).text(),
+                    new Response(samples.readableStream.body).text(),
+                    new Response(cast samples.bufferSource.body).text(),
+                ]).then(results -> {
+                    final expects = [
+                        samples.none.expect,
+                        samples.string.expect,
+                        samples.urlSearchParams.expect,
+                        samples.readableStream.expect,
+                        samples.bufferSource.expect,
+                    ];
+                    for (i in 0...expects.length) {
+                        results[i].should.be(expects[i]);
+                    }
+                }).then(cast done, fail);
+            });
+
+            it("should return Promise has expected string with boundary", done -> {
+                new Response(samples.formData.body).text().then(result -> {
+                    final boundary = StringTools.trim(result.split("\n")[0]);
+                    result.should.be(samples.formData.expect.join(boundary));
+                }).then(cast done, fail);
+            });
         });
     }
 }
