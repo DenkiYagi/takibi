@@ -312,5 +312,32 @@ class ResponseTest extends BuddySuite {
                 }))).then(cast done, fail);
             });
         });
+
+        describe("Response.redirect()", {
+            it("shoud return Response that has expected properties", {
+                final sampleUrl = 'https://google.com/';
+                final testCases = [
+                    { url: sampleUrl, status: null, expect: { url: sampleUrl, redirected: false, ok: false, status: 302, statusText: 'Found', body: null, headers: [['location', sampleUrl]] }, throwError: false },
+                ];
+
+                for (testCase in testCases) {
+                    if (testCase.throwError) {
+                        (() -> Response.redirect(testCase.url, testCase.status)).should.throwAnything();
+                    } else {
+                        final res = Response.redirect(testCase.url, testCase.status);
+                        res.url.should.be(testCase.expect.url);
+                        res.redirected.should.be(testCase.expect.redirected);
+                        res.ok.should.be(testCase.expect.ok);
+                        res.status.should.be(testCase.expect.status);
+                        res.statusText.should.be(testCase.expect.statusText);
+                        res.body.should.be(testCase.expect.body);
+
+                        testCase.expect.headers.forEach(headerPair -> {
+                            res.headers.get(headerPair[0]).should.be(headerPair[1]);
+                        });
+                    }
+                }
+            });
+        });
     }
 }
