@@ -35,7 +35,7 @@ class Body {
 
         var buffer: Dynamic;
         if (Std.is(rawBody, ArrayBuffer) || ArrayBuffer.isView(rawBody)) {
-            buffer = (ArrayBuffer.isView(rawBody)) ? cast (rawBody, ArrayBufferView) : new DataView(rawBody);
+            buffer = (ArrayBuffer.isView(rawBody)) ? cast (rawBody) : new DataView(rawBody);
         } else if (Std.is(rawBody, FormData)) {
             buffer = new TextEncoder().encode(generateFormDataString());
         } else if (Std.is(rawBody, URLSearchParams)) {
