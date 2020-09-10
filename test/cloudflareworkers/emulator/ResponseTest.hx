@@ -257,5 +257,60 @@ class ResponseTest extends BuddySuite {
                 }))).then(cast done, fail);
             });
         });
+
+        describe("Response.clone()", {
+            it("should return Response that has same properties as source Response", (done) -> {
+                final sampleReadableStream = new ReadableStream(new WebReadableStream({
+                    type: Bytes,
+                    start: (controller: ReadableByteStreamController) -> {
+                        controller.enqueue(new TextEncoder().encode("ReadableStream"));
+                        controller.close();
+                    }
+                }));
+                final sampleUrlSearchParams = new URLSearchParams({symbols:" `~!@#$%^&*()-_=+[{]};:'\"<,>.?/|\\", seconds:"null"});
+                final testCases:Array<Dynamic> = [
+                    { body: "UVString",             expect: { url: "", redirected: false, ok: true, headers: [["content-type", "text/plain;charset=UTF-8"]], status: 200, statusText: "OK", body: "UVString" } },
+                    { body: sampleUrlSearchParams,  expect: { url: "", redirected: false, ok: true, headers: [["content-type", "application/x-www-form-urlencoded;charset=UTF-8"]], status: 200, statusText: "OK", body: "symbols=+%60%7E%21%40%23%24%25%5E%26*%28%29-_%3D%2B%5B%7B%5D%7D%3B%3A%27%22%3C%2C%3E.%3F%2F%7C%5C&seconds=null" } },
+                    { body: sampleReadableStream,   expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "OK", body: "ReadableStream" } },
+                    { init: { statusText: null },   expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "null", body: null } },
+                    { init: { statusText: "No Problem" },               expect: { url: "", redirected: false, ok: true, headers: [], status: 200, statusText: "No Problem", body: null } },
+                    { init: { status: 210, statusText: "No Problem" },  expect: { url: "", redirected: false, ok: true, headers: [], status: 210, statusText: "No Problem", body: null } },
+                    { init: { status: 310, statusText: "" },            expect: { url: "", redirected: false, ok: false, headers: [], status: 310, statusText: "", body: null } },
+                    { init: { headers: new Headers({"Content-Type": "text/html; charset=UTF-8"}) }, expect: { url: "", redirected: false, ok: true, headers: [ ["Content-Type", "text/html; charset=UTF-8" ] ], status: 200, statusText: "OK", body: null } },
+                    { init: { headers: [ ["Content-Type","image/gif"], ["accept-encoding", "deflate, gzip"] ] }, expect: { url: "", redirected: false, ok: true, headers: [ ["Content-Type","image/gif"], ["Accept-Encoding", "deflate, gzip"] ], status: 200, statusText: "OK", body: null } },
+                    { init: { headers: { "content-type": "application/json", "Accept-Encoding": "deflate" } }, expect: { url: "", redirected: false, ok: true, headers:  [ ["Content-type", "application/json"], ["Accept-Encoding", "deflate"] ], status: 200, statusText: "OK", body: null } },
+                ];
+
+                Promise.all(testCases.map(testCase -> new Promise((resolve, reject) -> {
+                    final source = new Response(testCase.body, testCase.init);
+                    final dest = source.clone();
+                    dest.ok.should.be(source.ok);
+                    dest.redirected.should.be(source.redirected);
+                    dest.status.should.be(source.status);
+                    dest.statusText.should.be(source.statusText);
+                    dest.url.should.be(source.url);
+
+                    var itr = source.headers.entries();
+                    var result = itr.next();
+                    while (!result.done) {
+                        dest.headers.get(result.value[0]).should.be(result.value[1]);
+                        result = itr.next();
+                    }
+
+                    if (source.body == null) {
+                        dest.body.should.be(null);
+                        resolve(null);
+                    } else {
+                        Promise.all([
+                            ResponseTest.bodyToString(source.body),
+                            ResponseTest.bodyToString(dest.body)
+                        ]).then(results -> {
+                            results[0].should.be(results[1]);
+                            resolve(null);
+                        }, reject);
+                    }
+                }))).then(cast done, fail);
+            });
+        });
     }
 }
