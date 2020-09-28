@@ -1,5 +1,7 @@
 package cloudflareworkers.emulator;
 
+import js.html.TextDecoder;
+import js.html.TextEncoder;
 import buddy.BuddySuite;
 using buddy.Should;
 using cloudflareworkers.emulator.Body;
@@ -12,13 +14,17 @@ class BodyTest extends BuddySuite {
     public function new() {
         describe("Body.arrayBuffer()", {
             it("should return Promise<ArrayBuffer>", done -> {
-                final body = new Response("");
-                final result = body.arrayBuffer();
-                Std.is(result, Promise).should.be(true);
-                result.then(ab -> {
-                    if (Std.is(ab, ArrayBuffer)) done();
-                    else fail();
-                }, err -> { fail(); });
+                final testCases:Array<Dynamic> = [
+                    { body: "USVString", expect: "USVString" },
+                    { body: new TextEncoder().encode("ArrayBuffer"), expect: "ArrayBuffer" },
+                    { body: null, expect: "" },
+                ];
+
+                Promise.all(testCases.map(testCase -> {
+                    return new Response(testCase.body).arrayBuffer().then(ab -> {
+                        new TextDecoder().decode(ab).should.be(testCase.expect);
+                    });
+                })).then(cast done, fail);
             });
         });
 
