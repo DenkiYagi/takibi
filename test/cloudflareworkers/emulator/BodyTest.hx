@@ -13,7 +13,7 @@ import js.lib.ArrayBuffer;
 class BodyTest extends BuddySuite {
     public function new() {
         describe("Body.arrayBuffer()", {
-            it("should return Promise<ArrayBuffer>", done -> {
+            it("should return Promise has ArrayBuffer of expected string", done -> {
                 final testCases:Array<Dynamic> = [
                     { body: "USVString", expect: "USVString" },
                     { body: new TextEncoder().encode("ArrayBuffer"), expect: "ArrayBuffer" },
