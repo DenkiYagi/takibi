@@ -1,5 +1,6 @@
 package cloudflareworkers.emulator;
 
+import js.lib.HaxeIterator;
 import buddy.BuddySuite;
 using buddy.Should;
 using cloudflareworkers.emulator.Body;
@@ -23,14 +24,25 @@ class BodyTest extends BuddySuite {
         });
 
         describe("Body.formData()", {
-            it("should return Promise<FormData>", done -> {
-                final body = new Response(new FormData());
-                final result = body.formData();
-                Std.is(result, Promise).should.be(true);
-                result.then(ab -> {
-                    if (Std.is(ab, FormData)) done();
-                    else fail();
-                }, err -> { fail(); });
+            it("should return Promise has source FormData", done -> {
+                final sampleFormData = new FormData();
+                sampleFormData.append('key', 'value');
+                final testCases:Array<Dynamic> = [
+                    { body: sampleFormData, throwError: false },
+                    { body: null, throwError: true },
+                    { body: "invalid form data", throwError: true }
+                ];
+
+                Promise.all(testCases.map(testCase -> {
+                    if (testCase.throwError) {
+                        return new Response(testCase.body).json().then(fail, cast (() -> {}));
+                    }
+                    return new Response(testCase.body).formData().then(formData -> {
+                        for (kv in new HaxeIterator(formData.entries())) {
+                            (kv.value == sampleFormData.get(kv.key)).should.be(true);
+                        }
+                    });
+                })).then(cast done, fail);
             });
         });
 
