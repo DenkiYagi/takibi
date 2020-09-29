@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-        haxe-version: [4.x]
+        haxe-version: [4.1.4]
 
     steps:
     - uses: actions/checkout@v2
