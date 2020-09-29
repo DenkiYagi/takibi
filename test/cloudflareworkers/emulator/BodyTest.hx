@@ -1,5 +1,7 @@
 package cloudflareworkers.emulator;
 
+import js.html.TextEncoder;
+import haxe.Json;
 import buddy.BuddySuite;
 using buddy.Should;
 using cloudflareworkers.emulator.Body;
@@ -35,14 +37,30 @@ class BodyTest extends BuddySuite {
         });
 
         describe("Body.json()", {
-            it("should return Promise<Dynamic>", done -> {
-                final body = new Response("{\"Hello\":\"World\"}");
-                final result = body.json();
-                Std.is(result, Promise).should.be(true);
-                result.then(json -> {
-                    if (Std.is(json, Dynamic)) done();
-                    else fail();
-                }, err -> { fail(); });
+            it("should return Promise has expected objects", done -> {
+                final someObject = {
+                    key: "value",
+                    number: 0,
+                    bool: true
+                };
+                final json = Json.stringify(someObject);
+                final testCases:Array<Dynamic> = [
+                    { body: null, throwError: true },
+                    { body: json, throwError: false },
+                    { body: new TextEncoder().encode(json), throwError: false },
+                    { body: "Invalid JSON", throwError: true },
+                ];
+
+                Promise.all(testCases.map(testCase -> {
+                    if (testCase.throwError) {
+                        return new Response(testCase.body).json().then(fail, cast (() -> {}));
+                    }
+                    return new Response(testCase.body).json().then(json -> {
+                        (json.key == someObject.key).should.be(true);
+                        (json.number == someObject.number).should.be(true);
+                        (json.bool == someObject.bool).should.be(true);
+                    });
+                })).then(cast done, fail);
             });
         });
 
