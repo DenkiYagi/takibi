@@ -52,79 +52,49 @@ class BodyTest extends BuddySuite {
         });
 
         describe("Body.text()", {
-            final urlSearchParams = new URLSearchParams({
-                'key': 'value',
-                'symbols': '~`!@#$%^&*()_+-={}|[]\\;\':"/.,?>< '
-            });
-            final formData = new FormData();
-            formData.append('key', 'value');
-            formData.append('symbols', '~`!@#$%^&*()_+-={}|[]\\;\':"/.,?>< ');
-            final readableStream = new ReadableStream(new WebReadableStream({
-                type: Bytes,
-                start: (controller: ReadableByteStreamController) -> {
-                    controller.enqueue(new TextEncoder().encode("ReadableStream"));
-                    controller.close();
-                }
-            }));
-            final buffer = new TextEncoder().encode("バッファ");
-
-            final samples = {
-                none: {
-                    body: null,
-                    expect: "",
-                },
-                string: {
-                    body: "USVString\r\n",
-                    expect: "USVString\r\n",
-                },
-                urlSearchParams: {
-                    body: urlSearchParams,
-                    expect: "key=value&symbols=%7E%60%21%40%23%24%25%5E%26*%28%29_%2B-%3D%7B%7D%7C%5B%5D%5C%3B%27%3A%22%2F.%2C%3F%3E%3C+",
-                },
-                formData: {
-                    body: formData,
-                    expect: [
-                        "",
-                        "\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n",
-                        "Content-Disposition: form-data; name=\"symbols\"\r\n\r\n~`!@#$%^&*()_+-={}|[]\\;':\"/.,?>< \r\n",
-                        "--"
-                    ],
-                },
-                readableStream: {
-                    body: readableStream,
-                    expect: "ReadableStream",
-                },
-                bufferSource: {
-                    body: buffer,
-                    expect: "バッファ",
-                },
-            };
-
             it("should return Promise has expected string", done -> {
-                Promise.all([
-                    new Response(samples.none.body).text(),
-                    new Response(samples.string.body).text(),
-                    new Response(samples.urlSearchParams.body).text(),
-                    new Response(samples.readableStream.body).text(),
-                    new Response(cast samples.bufferSource.body).text(),
-                ]).then(results -> {
-                    final expects = [
-                        samples.none.expect,
-                        samples.string.expect,
-                        samples.urlSearchParams.expect,
-                        samples.readableStream.expect,
-                        samples.bufferSource.expect,
-                    ];
-                    for (i in 0...expects.length) {
-                        results[i].should.be(expects[i]);
+                final urlSearchParams = new URLSearchParams({
+                    'key': 'value',
+                    'symbols': '~`!@#$%^&*()_+-={}|[]\\;\':"/.,?>< '
+                });
+                final readableStream = new ReadableStream(new WebReadableStream({
+                    type: Bytes,
+                    start: (controller: ReadableByteStreamController) -> {
+                        controller.enqueue(new TextEncoder().encode("ReadableStream"));
+                        controller.close();
                     }
-                }).then(cast done, fail);
+                }));
+                final buffer = new TextEncoder().encode("バッファ");
+
+                final testCases:Array<Dynamic> = [
+                    { body: null, expect: "" },
+                    { body: "USVString\r\n", expect: "USVString\r\n" },
+                    { body: urlSearchParams, expect: "key=value&symbols=%7E%60%21%40%23%24%25%5E%26*%28%29_%2B-%3D%7B%7D%7C%5B%5D%5C%3B%27%3A%22%2F.%2C%3F%3E%3C+" },
+                    { body: readableStream, expect: "ReadableStream" },
+                    { body: buffer, expect: "バッファ" }
+                ];
+
+                Promise.all(testCases.map(testCase -> {
+                    return new Response(testCase.body).text().then(result -> {
+                        result.should.be(testCase.expect);
+                    });
+                })).then(cast done, fail);
             });
 
             it("should return Promise has expected string with boundary", done -> {
-                new Response(samples.formData.body).text().then(result -> {
+                final formData = new FormData();
+                formData.append('key', 'value');
+                formData.append('symbols', '~`!@#$%^&*()_+-={}|[]\\;\':"/.,?>< ');
+                final expect = [
+                    "",
+                    "\r\nContent-Disposition: form-data; name=\"key\"\r\n\r\nvalue\r\n",
+                    "\r\nContent-Disposition: form-data; name=\"symbols\"\r\n\r\n~`!@#$%^&*()_+-={}|[]\\;':\"/.,?>< \r\n",
+                    "--\r\n"
+                ];
+
+                new Response(formData).text().then(result -> {
                     final boundary = StringTools.trim(result.split("\n")[0]);
-                    result.should.be(samples.formData.expect.join(boundary));
+                    result.should.be(expect.join(boundary));
                 }).then(cast done, fail);
             });
         });
