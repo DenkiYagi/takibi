@@ -24,7 +24,38 @@ npm install
 npm start $WORKER_SCRIPT_PATH
 ```
 
+### 使用例
 
+~/worker-example/index.js
+```javascript
+const PRODUCTION = false
+
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+/**
+ * Respond with hello worker text
+ * @param {Request} request
+ */
+async function handleRequest(request) {
+  return await fetch(
+    PRODUCTION ? 'https://example.com' : 'http://localhost:8080'
+  )
+}
+```
+
+~/helloworld-app/index.js
+```javascript
+const app = require('exoress')()
+app.get('/', (req, res) => res.end('Hello World!'))
+app.listen(8080)
+```
+
+shell
 ```sh
-npm start $WORKER_SCRIPT
+cd ~/helloworld-app
+node index &
+cd ~/cloudflare-workers-emulator # This repository's directory
+npm start ~/worker-example/index.js
 ```
