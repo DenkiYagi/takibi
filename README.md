@@ -1,4 +1,4 @@
-# Cloudflare Workers Emulator 〇〇
+# Takibi（焚火）
 
 [Cloudflare Workers](https://workers.cloudflare.com/)のローカル環境エミュレータ。
 
