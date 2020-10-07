@@ -31,7 +31,7 @@ jobs:
       with:
         haxe-version: ${{ matrix.haxe-version }}
     - name: Install Haxe dependencies
-      run: haxelib install test.hxml --always
+      run: haxelib install test.hxml --always --quiet
     - name: Install Node dependencies
       run: npm ci
     - run: npm test
