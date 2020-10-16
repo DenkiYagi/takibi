@@ -47,7 +47,7 @@ async function handleRequest(request) {
 
 ~/helloworld-app/index.js
 ```javascript
-const app = require('exoress')()
+const app = require('express')()
 app.get('/', (req, res) => res.end('Hello World!'))
 app.listen(8080)
 ```
