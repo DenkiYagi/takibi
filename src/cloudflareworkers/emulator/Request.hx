@@ -1,18 +1,14 @@
 package cloudflareworkers.emulator;
 
 import cloudflareworkers.emulator.Body.BodySource;
-import js.lib.Object;
-import js.Lib;
-import js.lib.Error.TypeError;
+import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.DynamicAccess;
 import haxe.extern.EitherType;
-import js.lib.ArrayBuffer;
-import js.lib.Promise;
-import js.node.stream.Readable;
-import js.node.util.TextEncoder;
-import js.npm.webstreams_polyfill.ReadableByteStreamController;
+import js.lib.Error.TypeError;
+import js.lib.Uint8Array;
 import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
 import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
+import js.npm.webstreams_polyfill.ReadableStreamDefaultController;
 
 class Request extends Body {
     /**
