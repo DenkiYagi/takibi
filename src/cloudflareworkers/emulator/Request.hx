@@ -53,9 +53,26 @@ class Request extends Body {
             redirect = (_init.redirect != null) ? _init.redirect : _input.redirect;
 
             var _body:Null<EitherType<String, ReadableStream>> = cast _input.body;
-            // if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
-            //     _body = (cast _body).pipeThrough(new TransformStream());
-            // }
+            if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
+                final reader:ReadableStreamDefaultReader = cast(_body, ReadableStream).getReader();
+                _body = new ReadableStream(new WebReadableStream(cast {
+                    type: Bytes,
+                    start: (ctrl:ReadableStreamDefaultController<Uint8Array>) -> {
+                        function push() {
+                            reader.read().then((result) -> {
+                                if (result.done) {
+                                    ctrl.close();
+                                    return;
+                                }
+                                ctrl.enqueue(result.value);
+                                push();
+                            });
+                        }
+                        push();
+                        return;
+                    }
+                }));
+            }
             super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : _body));
         }
     }
