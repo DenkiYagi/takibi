@@ -57,9 +57,9 @@ class Request extends Body {
             redirect = (_init.redirect != null) ? _init.redirect : _input.redirect;
 
             var _body:Null<EitherType<String, ReadableStream>> = cast _input.body;
-            if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
-                _body = (cast _body).pipeThrough(new TransformStream());
-            }
+            // if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
+            //     _body = (cast _body).pipeThrough(new TransformStream());
+            // }
             super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : _body));
         }
     }
