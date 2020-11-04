@@ -1,19 +1,20 @@
 package cloudflareworkers.emulator;
 
-import js.node.url.URLSearchParams;
-import js.html.TextEncoder;
-import haxe.Json;
 import buddy.BuddySuite;
-using buddy.Should;
-using cloudflareworkers.emulator.Body;
-using cloudflareworkers.emulator.Response;
-using cloudflareworkers.emulator.FormData;
+import haxe.Json;
+import js.lib.ArrayBuffer;
+import js.lib.HaxeIterator;
+import js.lib.Promise;
+import js.node.url.URLSearchParams;
 import js.node.util.TextEncoder;
 import js.npm.webstreams_polyfill.ReadableByteStreamController;
 import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
 import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
-import js.lib.Promise;
-import js.lib.ArrayBuffer;
+
+using buddy.Should;
+using cloudflareworkers.emulator.Body;
+using cloudflareworkers.emulator.FormData;
+using cloudflareworkers.emulator.Response;
 
 class BodyTest extends BuddySuite {
     public function new() {
