@@ -3,6 +3,6 @@
 -cp extern/node-fetch/src
 -cp extern/form-data/src
 -cp extern/web-streams-polyfill/src
--lib hxnodejs:git:git@github.com:HaxeFoundation/hxnodejs.git
+-lib hxnodejs
 -main cloudflareworkers.emulator.Main
 -js ./index.js
