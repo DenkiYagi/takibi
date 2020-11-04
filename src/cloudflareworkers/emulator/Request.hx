@@ -1,18 +1,14 @@
 package cloudflareworkers.emulator;
 
 import cloudflareworkers.emulator.Body.BodySource;
-import js.lib.Object;
-import js.Lib;
-import js.lib.Error.TypeError;
+import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
 import haxe.DynamicAccess;
 import haxe.extern.EitherType;
-import js.lib.ArrayBuffer;
-import js.lib.Promise;
-import js.node.stream.Readable;
-import js.node.util.TextEncoder;
-import js.npm.webstreams_polyfill.ReadableByteStreamController;
+import js.lib.Error.TypeError;
+import js.lib.Uint8Array;
 import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
 import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
+import js.npm.webstreams_polyfill.ReadableStreamDefaultController;
 
 class Request extends Body {
     /**
@@ -58,7 +54,24 @@ class Request extends Body {
 
             var _body:Null<EitherType<String, ReadableStream>> = cast _input.body;
             if (!(cast _init).hasOwnProperty("body") && Std.is(_body, ReadableStream)) {
-                _body = (cast _body).pipeThrough(new TransformStream());
+                final reader:ReadableStreamDefaultReader = cast(_body, ReadableStream).getReader();
+                _body = new ReadableStream(new WebReadableStream(cast {
+                    type: Bytes,
+                    start: (ctrl:ReadableStreamDefaultController<Uint8Array>) -> {
+                        function push() {
+                            reader.read().then((result) -> {
+                                if (result.done) {
+                                    ctrl.close();
+                                    return;
+                                }
+                                ctrl.enqueue(result.value);
+                                push();
+                            });
+                        }
+                        push();
+                        return;
+                    }
+                }));
             }
             super(toReadableStream(method, ((cast _init).hasOwnProperty("body")) ? _init.body : _body));
         }
