@@ -1,19 +1,20 @@
 package cloudflareworkers.emulator;
 
-import js.node.url.URLSearchParams;
-import js.html.TextEncoder;
-import haxe.Json;
 import buddy.BuddySuite;
-using buddy.Should;
-using cloudflareworkers.emulator.Body;
-using cloudflareworkers.emulator.Response;
-using cloudflareworkers.emulator.FormData;
+import haxe.Json;
+import js.lib.ArrayBuffer;
+import js.lib.HaxeIterator;
+import js.lib.Promise;
+import js.node.url.URLSearchParams;
 import js.node.util.TextEncoder;
 import js.npm.webstreams_polyfill.ReadableByteStreamController;
 import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
 import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
-import js.lib.Promise;
-import js.lib.ArrayBuffer;
+
+using buddy.Should;
+using cloudflareworkers.emulator.Body;
+using cloudflareworkers.emulator.FormData;
+using cloudflareworkers.emulator.Response;
 
 class BodyTest extends BuddySuite {
     public function new() {
@@ -30,14 +31,25 @@ class BodyTest extends BuddySuite {
         });
 
         describe("Body.formData()", {
-            it("should return Promise<FormData>", done -> {
-                final body = new Response(new FormData());
-                final result = body.formData();
-                Std.is(result, Promise).should.be(true);
-                result.then(ab -> {
-                    if (Std.is(ab, FormData)) done();
-                    else fail();
-                }, err -> { fail(); });
+            it("should return Promise has source FormData", done -> {
+                final sampleFormData = new FormData();
+                sampleFormData.append('key', 'value');
+                final testCases:Array<Dynamic> = [
+                    { body: sampleFormData, throwError: false },
+                    { body: null, throwError: true },
+                    { body: "invalid form data", throwError: true }
+                ];
+
+                Promise.all(testCases.map(testCase -> {
+                    if (testCase.throwError) {
+                        return new Response(testCase.body).json().then(fail, cast (() -> {}));
+                    }
+                    return new Response(testCase.body).formData().then(formData -> {
+                        for (kv in new HaxeIterator(formData.entries())) {
+                            (kv.value == sampleFormData.get(kv.key)).should.be(true);
+                        }
+                    });
+                })).then(cast done, fail);
             });
         });
 
