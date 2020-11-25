@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.Node;
 import js.html.Console;

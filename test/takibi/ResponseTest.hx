@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import buddy.BuddySuite;
 import js.lib.Promise;
@@ -10,7 +10,7 @@ import js.npm.webstreams_polyfill.ReadableByteStreamController;
 import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
 import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
 using buddy.Should;
-using cloudflareworkers.emulator.Response;
+using takibi.Response;
 
 class ResponseTest extends BuddySuite {
     static function bodyToString(body: ReadableStream): Promise<String> {

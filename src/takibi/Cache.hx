@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import haxe.ds.Map;
 import haxe.extern.EitherType;
@@ -6,7 +6,7 @@ import js.lib.Error;
 import js.lib.Promise;
 
 class Cache {
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     function new() {}
 
     final cacheMap = new Map<String, Response>();

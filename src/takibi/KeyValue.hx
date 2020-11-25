@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 abstract KeyValue<K, V>(Array<Any>) {
     public var key(get, never):K;

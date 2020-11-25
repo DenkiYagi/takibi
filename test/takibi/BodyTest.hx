@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import buddy.BuddySuite;
 import haxe.Json;
@@ -12,9 +12,9 @@ import js.npm.webstreams_polyfill.ReadableStream in WebReadableStream;
 import js.npm.webstreams_polyfill.ReadableStream.UnderlyingByteSourceType;
 
 using buddy.Should;
-using cloudflareworkers.emulator.Body;
-using cloudflareworkers.emulator.FormData;
-using cloudflareworkers.emulator.Response;
+using takibi.Body;
+using takibi.FormData;
+using takibi.Response;
 
 class BodyTest extends BuddySuite {
 	public function new() {

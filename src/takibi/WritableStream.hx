@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.Lib.undefined;
 import js.lib.Uint8Array;
@@ -8,12 +8,12 @@ import js.npm.webstreams_polyfill.WritableStream in WebWritableStream;
 
 @:keep
 class WritableStream {
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     final _raw:WebWritableStream<Uint8Array> = undefined;
 
     public final locked:Bool = undefined;
 
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     function new(raw:WebWritableStream<Uint8Array>) {
         Object.defineProperty(this, "_raw", {value: raw, enumerable: false});
     }

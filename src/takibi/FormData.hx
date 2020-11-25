@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.Syntax;
 import js.lib.Map;

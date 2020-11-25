@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.lib.Object;
 import js.lib.Uint8Array;
@@ -9,7 +9,7 @@ import js.Lib.undefined;
 
 @:keep
 class ReadableStream {
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     final _raw:WebReadableStream<Uint8Array> = undefined;
 
     /**
@@ -17,7 +17,7 @@ class ReadableStream {
     **/
     public final locked:Bool = undefined;
 
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     function new(raw:WebReadableStream<Uint8Array>) {
         Object.defineProperty(this, "_raw", {value: raw, enumerable: false});
         Object.defineProperty(this, "locked", {get: () -> raw.locked});
