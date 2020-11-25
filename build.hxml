@@ -4,5 +4,5 @@
 -cp extern/form-data/src
 -cp extern/web-streams-polyfill/src
 -lib hxnodejs
--main cloudflareworkers.emulator.Main
+-main takibi.Main
 -js ./index.js

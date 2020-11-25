@@ -1,7 +1,7 @@
-package cloudflareworkers.emulator;
+package takibi;
 
-import cloudflareworkers.emulator.Request;
-import cloudflareworkers.emulator.Response;
+import takibi.Request;
+import takibi.Response;
 import haxe.extern.EitherType;
 import js.Node;
 import js.Syntax;
@@ -116,10 +116,10 @@ class Runtime {
             fetch: fetch,
             caches: new CacheStorage(),
             addEventListener: addEventListener,
-            Request: cloudflareworkers.emulator.Request,
-            Response: cloudflareworkers.emulator.Response,
-            Headers: cloudflareworkers.emulator.Headers,
-            FormData: cloudflareworkers.emulator.FormData,
+            Request: takibi.Request,
+            Response: takibi.Response,
+            Headers: takibi.Headers,
+            FormData: takibi.FormData,
             URL: js.node.url.URL,
             URLSearchParams: js.node.url.URLSearchParams,
 

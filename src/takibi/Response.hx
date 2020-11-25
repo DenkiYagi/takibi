@@ -1,10 +1,10 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.html.URL;
 import js.lib.Error.RangeError;
 import js.lib.HaxeIterator;
-import cloudflareworkers.emulator.Body.BodySource;
-import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
+import takibi.Body.BodySource;
+import takibi.ReadableStream.ReadableStreamDefaultReader;
 import haxe.extern.EitherType;
 import js.Syntax;
 import js.lib.ArrayBuffer;

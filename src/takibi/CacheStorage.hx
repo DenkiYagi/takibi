@@ -1,9 +1,9 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.lib.Object;
 
 class CacheStorage {
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     function new() {
         final cache = new Cache();
         Object.defineProperty(this, "default", {get: () -> cache});

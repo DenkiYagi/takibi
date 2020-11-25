@@ -1,7 +1,7 @@
-package cloudflareworkers.emulator;
+package takibi;
 
-import cloudflareworkers.emulator.Body.BodySource;
-import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
+import takibi.Body.BodySource;
+import takibi.ReadableStream.ReadableStreamDefaultReader;
 import haxe.DynamicAccess;
 import haxe.extern.EitherType;
 import js.lib.Error.TypeError;

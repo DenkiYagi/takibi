@@ -1,11 +1,11 @@
-package cloudflareworkers.emulator;
+package takibi;
 
-import cloudflareworkers.emulator.ReadableStream.ReadableStreamDefaultReader;
+import takibi.ReadableStream.ReadableStreamDefaultReader;
 import buddy.BuddySuite;
 import js.lib.Promise;
 import js.node.Buffer;
 using buddy.Should;
-using cloudflareworkers.emulator.Request;
+using takibi.Request;
 
 class RequestTest extends BuddySuite {
     static function bodyToString(body: ReadableStream): Promise<String> {

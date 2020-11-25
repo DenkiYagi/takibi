@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.lib.Promise;
 
@@ -15,7 +15,7 @@ class FetchEvent {
     **/
     public final request:Request;
 
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     function new(request:Request, impl:FetchEventImpl) {
         this.impl = impl;
         this.type = "fetch";
@@ -52,7 +52,7 @@ class FetchEvent {
     }
 }
 
-@:allow(cloudflareworkers.emulator.Runtime)
+@:allow(takibi.Runtime)
 private typedef FetchEventImpl = {
     var passThroughOnException:() -> Void;
     var respondWith:(task:Promise<Response>) -> Void;

@@ -1,4 +1,4 @@
-package cloudflareworkers.emulator;
+package takibi;
 
 import js.lib.Object;
 import js.lib.Uint8Array;
@@ -7,7 +7,7 @@ import js.npm.webstreams_polyfill.TransformStream in WebTransformStream;
 
 @:keep
 class TransformStream {
-    @:allow(cloudflareworkers.emulator)
+    @:allow(takibi)
     final _raw:WebTransformStream<Uint8Array, Uint8Array> = undefined;
 
     public final writable:WritableStream;

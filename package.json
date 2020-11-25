@@ -1,5 +1,5 @@
 {
-  "name": "cloudflare-workers-emulator",
+  "name": "takibi",
   "version": "1.0.0",
   "description": "Local emulator for Cloudflare Workers",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DenkiYagi/cloudflare-workers-emulator.git"
+    "url": "git+https://github.com/DenkiYagi/takibi.git"
   },
   "keywords": [
     "CloudflareWorkers",
@@ -20,9 +20,9 @@
   "author": "DenkiYagi",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/DenkiYagi/cloudflare-workers-emulator/issues"
+    "url": "https://github.com/DenkiYagi/takibi/issues"
   },
-  "homepage": "https://github.com/DenkiYagi/cloudflare-workers-emulator#readme",
+  "homepage": "https://github.com/DenkiYagi/takibi#readme",
   "dependencies": {
     "abab": "^2.0.3",
     "node-fetch": "^2.6.0",

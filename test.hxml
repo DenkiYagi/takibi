@@ -6,7 +6,7 @@
 -cp extern/web-streams-polyfill/src
 -lib hxnodejs
 -lib buddy
--main cloudflareworkers.emulator.TestMain
+-main takibi.TestMain
 -js ./test/index.js
 -D buddy-colors
 --cmd node test/index
